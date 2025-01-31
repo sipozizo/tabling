@@ -2,8 +2,9 @@ package sipozizo.tabling.entity;
 
 // Store.java
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
+import sipozizo.tabling.user.entity.User;
+
 import java.time.LocalTime;
 
 @Getter
