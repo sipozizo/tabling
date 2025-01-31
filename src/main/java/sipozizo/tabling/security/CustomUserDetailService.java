@@ -5,6 +5,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import sipozizo.tabling.user.entity.User;
 import sipozizo.tabling.user.repository.UserRepository;
 
@@ -12,6 +13,7 @@ import java.util.NoSuchElementException;
 
 @RequiredArgsConstructor
 @Component
+@Service
 public class CustomUserDetailService implements UserDetailsService {
 
     private final UserRepository userRepository;
