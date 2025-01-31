@@ -20,7 +20,6 @@ public class Store extends BaseEntity {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @NotBlank(message = "가게 이름은 공백이어서는 안 됩니다.")
     @Column(name = "name")
     private String name;
 
