@@ -14,7 +14,7 @@ public class User extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank(message = "Name should not be blank")
+    @NotBlank(message = "이름은 공백이어서 안 됩니다.")
     @Column(name = "name")
     private String name;
 
@@ -24,17 +24,17 @@ public class User extends BaseEntity {
     @Column(name = "address")
     private String address;
 
-    @NotBlank(message = "Email should not be blank")
-    @Email(message = "Email should be valid")
+    @NotBlank(message = "이메일은 공백이어서는 안 됩니다.")
+    @Email(message = "유효한 이메일 주소여야 합니다.")
     @Column(name = "email", unique = true)
     private String email;
 
-    @NotBlank(message = "Password should not be blank")
+    @NotBlank(message = "비밀번호는 공백이어서는 안됩니다.")
     @Column(name = "password")
     private String password;
 
     @Enumerated(EnumType.STRING)
-    @NotNull(message = "User role should not be null")
+    @NotNull(message = "유저 역할은 null일 수 없습니다.")
     @Column(name = "user_role")
     private UserRole userRole;
 
