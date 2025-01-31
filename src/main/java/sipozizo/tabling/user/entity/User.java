@@ -1,7 +1,13 @@
-package sipozizo.tabling.entity;
+package sipozizo.tabling.user.entity;
 
 
 import jakarta.persistence.*;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import sipozizo.tabling.auth.dto.request.UserRegisterRequest;
+import sipozizo.tabling.entity.BaseEntity;
+import sipozizo.tabling.user.enums.UserRole;
 
 @Entity
 @Table(name = "Users")
@@ -23,7 +29,6 @@ public class User extends BaseEntity {
     @Column(name = "address")
     private String address;
 
-    @NotBlank(message = "이메일은 공백이어서는 안 됩니다.")
     @Column(name = "email", unique = true)
     private String email;
 
@@ -60,20 +65,20 @@ public class User extends BaseEntity {
     }
     
     // 업데이트 수정본 (Patch)
-    public void updateUser(UserUpdateRequest request) {
-        if (request.getName() != null) {
-            this.name = request.getName();
-        }
-        if (request.getPhoneNumber() != null) {
-            this.phoneNumber = request.getPhoneNumber();
-        }
-        if (request.getAddress() != null) {
-            this.address = request.getAddress();
-        }
-        if (request.getEmail() != null) {
-            this.email = request.getEmail();
-        }
-    }    
+//    public void updateUser(UserUpdateRequest request) {
+//        if (request.getName() != null) {
+//            this.name = request.getName();
+//        }
+//        if (request.getPhoneNumber() != null) {
+//            this.phoneNumber = request.getPhoneNumber();
+//        }
+//        if (request.getAddress() != null) {
+//            this.address = request.getAddress();
+//        }
+//        if (request.getEmail() != null) {
+//            this.email = request.getEmail();
+//        }
+//    }
 
     // 비밀번호 업데이트
     public void updatePassword(String encodedPassword) {
@@ -84,7 +89,7 @@ public class User extends BaseEntity {
 
     // 권한 업데이트
     public void updateRole(UserRole userRole) {
-        if (userRole != null {
+        if (userRole != null) {
             this.userRole = userRole;
         }
     }
