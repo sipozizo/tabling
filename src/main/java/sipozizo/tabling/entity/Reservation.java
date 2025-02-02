@@ -6,7 +6,7 @@ import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "Reservations")
+@Table(name = "reservations")
 public class Reservation extends BaseEntity {
 
     @Id
