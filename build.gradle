@@ -52,6 +52,7 @@ dependencies {
 
     // Cache
     implementation 'org.springframework.boot:spring-boot-starter-cache'
+    implementation 'com.github.ben-manes.caffeine:caffeine'
     // implementation 'com.github.ben-manes.caffeine:caffeine' // CaffeineCacheManager로 변경할 때 사용할 의존성
 
     // jwt
