@@ -1,4 +1,4 @@
-package sipozizo.tabling.store.model.response;
+package sipozizo.tabling.domain.store.model.response;
 
 public record StoreResponse(
         String message

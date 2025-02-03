@@ -1,4 +1,4 @@
-package sipozizo.tabling.store.model.request;
+package sipozizo.tabling.domain.store.model.request;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.validation.constraints.NotBlank;
