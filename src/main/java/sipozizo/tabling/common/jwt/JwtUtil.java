@@ -6,10 +6,9 @@ import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
-import sipozizo.tabling.entity.UserRole;
+import sipozizo.tabling.user.enums.UserRole;
 
 import java.security.Key;
-import java.security.SignatureException;
 import java.util.Base64;
 import java.util.Date;
 
@@ -28,10 +27,6 @@ public class JwtUtil {
     public void init() {
         byte[] bytes = Base64.getDecoder().decode(secretKey);
         key = Keys.hmacShaKeyFor(bytes);
-    }
-
-    public String extractUsername(String token) {
-        return extractAllClaims(token).getSubject();
     }
 
     private Claims extractAllClaims(String token) {
@@ -56,16 +51,9 @@ public class JwtUtil {
         return PREFIX + token;
     }
 
-
-
     public Long extractUserId(String token) {
         return Long.parseLong(extractAllClaims(token).getSubject());
     }
-
-    public String extractRoles(String token) {
-        return extractAllClaims(token).get("role", String.class);
-    }
-
 
     public boolean validateToken(String token) {
         try {

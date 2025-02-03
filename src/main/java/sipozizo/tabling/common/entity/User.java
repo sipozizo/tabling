@@ -1,10 +1,11 @@
 package sipozizo.tabling.common.entity;
 
-
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import sipozizo.tabling.auth.dto.request.UserRegisterRequest;
+import sipozizo.tabling.user.enums.UserRole;
 
 @Entity
 @Table(name = "users")
@@ -48,7 +49,6 @@ public class User extends BaseEntity {
         this.password = password;
         this.userRole = userRole;
     }
-
     // 유저 회원가입(정적 팩토리 메서드) .. TODO 에러나서 잠시 주석처리
 //    public static User registerUser(UserRegisterRequest request, String encodedPassword) {
 //        return new User(
@@ -62,6 +62,19 @@ public class User extends BaseEntity {
 //    }
 //
 //    // 업데이트 수정본 (Patch)
+    // 유저 회원가입(정적 팩토리 메서드)
+    public static User registerUser(UserRegisterRequest request, String encodedPassword) {
+        return new User(
+                request.getName(),
+                request.getPhoneNumber(),
+                request.getAddress(),
+                request.getEmail(),
+                encodedPassword,
+                UserRole.USER
+            );
+    }
+    
+    // 업데이트 수정본 (Patch)
 //    public void updateUser(UserUpdateRequest request) {
 //        if (request.getName() != null) {
 //            this.name = request.getName();

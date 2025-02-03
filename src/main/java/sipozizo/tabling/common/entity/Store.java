@@ -3,6 +3,8 @@ package sipozizo.tabling.common.entity;
 // Store.java
 import jakarta.persistence.*;
 import lombok.Getter;
+import sipozizo.tabling.user.entity.User;
+
 import java.time.LocalTime;
 
 @Getter
