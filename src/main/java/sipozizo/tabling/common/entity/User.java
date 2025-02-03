@@ -2,9 +2,12 @@ package sipozizo.tabling.common.entity;
 
 
 import jakarta.persistence.*;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "Users")
+@Table(name = "users")
 @Getter //추가
 @NoArgsConstructor(access = AccessLevel.PROTECTED) // 추가
     
@@ -23,7 +26,6 @@ public class User extends BaseEntity {
     @Column(name = "address")
     private String address;
 
-    @NotBlank(message = "이메일은 공백이어서는 안 됩니다.")
     @Column(name = "email", unique = true)
     private String email;
 
@@ -47,33 +49,33 @@ public class User extends BaseEntity {
         this.userRole = userRole;
     }
 
-    // 유저 회원가입(정적 팩토리 메서드)
-    public static User registerUser(UserRegisterRequest request, String encodedPassword) {
-        return new User(
-                request.getName(),
-                request.getPhoneNumber(),
-                request.getAddress(),
-                request.getEmail(),
-                encodedPassword,
-                UserRole.USER
-            );
-    }
-    
-    // 업데이트 수정본 (Patch)
-    public void updateUser(UserUpdateRequest request) {
-        if (request.getName() != null) {
-            this.name = request.getName();
-        }
-        if (request.getPhoneNumber() != null) {
-            this.phoneNumber = request.getPhoneNumber();
-        }
-        if (request.getAddress() != null) {
-            this.address = request.getAddress();
-        }
-        if (request.getEmail() != null) {
-            this.email = request.getEmail();
-        }
-    }    
+    // 유저 회원가입(정적 팩토리 메서드) .. TODO 에러나서 잠시 주석처리
+//    public static User registerUser(UserRegisterRequest request, String encodedPassword) {
+//        return new User(
+//                request.getName(),
+//                request.getPhoneNumber(),
+//                request.getAddress(),
+//                request.getEmail(),
+//                encodedPassword,
+//                UserRole.USER
+//            );
+//    }
+//
+//    // 업데이트 수정본 (Patch)
+//    public void updateUser(UserUpdateRequest request) {
+//        if (request.getName() != null) {
+//            this.name = request.getName();
+//        }
+//        if (request.getPhoneNumber() != null) {
+//            this.phoneNumber = request.getPhoneNumber();
+//        }
+//        if (request.getAddress() != null) {
+//            this.address = request.getAddress();
+//        }
+//        if (request.getEmail() != null) {
+//            this.email = request.getEmail();
+//        }
+//    }
 
     // 비밀번호 업데이트
     public void updatePassword(String encodedPassword) {
@@ -84,7 +86,7 @@ public class User extends BaseEntity {
 
     // 권한 업데이트
     public void updateRole(UserRole userRole) {
-        if (userRole != null {
+        if (userRole != null) {
             this.userRole = userRole;
         }
     }

@@ -7,7 +7,7 @@ import java.time.LocalTime;
 
 @Getter
 @Entity
-@Table(name = "Stores")
+@Table(name = "stores")
 public class Store extends BaseEntity {
 
     @Id
