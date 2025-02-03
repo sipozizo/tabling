@@ -1,13 +1,12 @@
-package sipozizo.tabling.entity;
+package sipozizo.tabling.common.entity;
 
 
 import jakarta.persistence.*;
-import sipozizo.tabling.user.entity.User;
 
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "Reservations")
+@Table(name = "reservations")
 public class Reservation extends BaseEntity {
 
     @Id

@@ -1,15 +1,14 @@
-package sipozizo.tabling.entity;
+package sipozizo.tabling.common.entity;
 
 // Store.java
 import jakarta.persistence.*;
 import lombok.Getter;
-import sipozizo.tabling.user.entity.User;
 
 import java.time.LocalTime;
 
 @Getter
 @Entity
-@Table(name = "Stores")
+@Table(name = "stores")
 public class Store extends BaseEntity {
 
     @Id

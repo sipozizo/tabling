@@ -1,7 +1,7 @@
 package sipozizo.tabling.user.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import sipozizo.tabling.user.entity.User;
+import sipozizo.tabling.common.entity.User;
 
 import java.util.Optional;
 

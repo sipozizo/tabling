@@ -2,7 +2,7 @@ package sipozizo.tabling.auth.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import sipozizo.tabling.user.entity.User;
+import sipozizo.tabling.common.entity.User;
 
 @Getter
 @AllArgsConstructor

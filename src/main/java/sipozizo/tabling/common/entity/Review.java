@@ -1,4 +1,4 @@
-package sipozizo.tabling.entity;
+package sipozizo.tabling.common.entity;
 
 
 import jakarta.persistence.*;
@@ -6,7 +6,7 @@ import lombok.Getter;
 
 @Getter
 @Entity
-@Table(name = "Reviews")
+@Table(name = "reviews")
 public class Review extends BaseEntity {
 
     @Id
