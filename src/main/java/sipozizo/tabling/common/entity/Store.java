@@ -1,8 +1,7 @@
-package sipozizo.tabling.entity;
+package sipozizo.tabling.common.entity;
 
 // Store.java
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import java.time.LocalTime;
 

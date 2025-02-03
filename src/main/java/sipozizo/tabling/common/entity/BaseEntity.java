@@ -1,4 +1,4 @@
-package sipozizo.tabling.entity;
+package sipozizo.tabling.common.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.MappedSuperclass;

@@ -1,4 +1,4 @@
-package sipozizo.tabling.entity;
+package sipozizo.tabling.common.entity;
 
 public enum UserRole {
     ADMIN,
