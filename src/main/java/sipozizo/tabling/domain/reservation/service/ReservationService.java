@@ -8,6 +8,7 @@ import sipozizo.tabling.common.entity.Reservation;
 import sipozizo.tabling.common.entity.ReservationStatus;
 import sipozizo.tabling.common.entity.User;
 import sipozizo.tabling.domain.reservation.repository.ReservationRepository;
+import sipozizo.tabling.domain.user.repository.UserRepository;
 
 import java.time.LocalDateTime;
 

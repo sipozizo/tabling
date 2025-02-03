@@ -5,7 +5,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import sipozizo.tabling.auth.dto.request.UserRegisterRequest;
-import sipozizo.tabling.user.enums.UserRole;
+import sipozizo.tabling.domain.user.enums.UserRole;
 
 @Entity
 @Table(name = "users")
