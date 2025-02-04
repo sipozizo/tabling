@@ -10,7 +10,7 @@ import sipozizo.tabling.common.entity.User;
 import sipozizo.tabling.common.lock.service.RedisLockServiceV3;
 import sipozizo.tabling.domain.reservation.repository.ReservationRepository;
 import sipozizo.tabling.domain.store.repository.StoreRepository;
-import sipozizo.tabling.temp.UserRepository;
+import sipozizo.tabling.domain.user.repository;
 
 import java.util.List;
 
