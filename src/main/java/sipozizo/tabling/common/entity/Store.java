@@ -48,8 +48,6 @@ public class Store extends BaseEntity {
     @Column(name = "category")
     private String category;
 
-    @Column(name = "is_deleted")
-    private boolean isDeleted;
 
     //    착석 한계 개념 추가
     @Column(name = "max_seating_capacity")
@@ -65,5 +63,12 @@ public class Store extends BaseEntity {
         this.closingTime = closingTime;
         this.category = category;
         this.maxSeatingCapacity = maxSeatingCapacity;
+    }
+
+    public void incrementViewCount() {
+        if (this.view == 0) {
+            this.view = 1;
+        }
+        this.view++;
     }
 }
