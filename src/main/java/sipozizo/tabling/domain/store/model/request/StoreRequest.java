@@ -37,6 +37,6 @@ public record StoreRequest(
         String category,
 
         @NotBlank(message = "입장 가능 숫자를 입력하십시오.")
-        int maxSeatingCapacity
+        Integer maxSeatingCapacity
 ) {
 }
