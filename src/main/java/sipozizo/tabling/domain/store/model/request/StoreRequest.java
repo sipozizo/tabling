@@ -20,10 +20,10 @@ public record StoreRequest(
         @NotBlank(message = "주소는 필수 입력값입니다.")
         String storeAddress,
 
-        @Pattern(
-                regexp = "^\\d{4}-\\d{2}-\\d{2}$\n",
-                message = "사업자 번호는 필수 입력값입니다. 0000-00-00(예시) 형식으로 입력해주세요."
-        )
+//        @Pattern(
+//                regexp = "^\\d{4}-\\d{2}-\\d{2}$\n",
+//                message = "사업자 번호는 필수 입력값입니다. 0000-00-00(예시) 형식으로 입력해주세요."
+//        )
         String registrationNumber,
 
         @JsonFormat(pattern = "HH:mm:ss")
