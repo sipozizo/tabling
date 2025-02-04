@@ -2,6 +2,8 @@ package sipozizo.tabling.common.entity;
 
 
 
+import jakarta.persistence.*;
+
 import java.time.LocalDateTime;
 
 @Entity
