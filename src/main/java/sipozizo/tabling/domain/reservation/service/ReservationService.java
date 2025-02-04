@@ -8,6 +8,7 @@ import sipozizo.tabling.common.entity.Reservation;
 import sipozizo.tabling.common.entity.ReservationStatus;
 import sipozizo.tabling.common.entity.User;
 import sipozizo.tabling.domain.reservation.repository.ReservationRepository;
+import sipozizo.tabling.domain.user.repository.UserRepository;
 
 import java.time.LocalDateTime;
 
@@ -25,9 +26,9 @@ public class ReservationService {
 
 //       todo 추후 초기화 방법 정의 이후 변경하기
         Reservation reservation = new Reservation();
-        reservation.setReserver(reserver);
-        reservation.setReservationTime(reservationTime);
-        reservation.setReservationStatus(ReservationStatus.WAITING);
+//        reservation.setReserver(reserver);
+//        reservation.setReservationTime(reservationTime);
+//        reservation.setReservationStatus(ReservationStatus.WAITING);
 
         return reservationRepository.save(reservation);
     }

@@ -2,7 +2,9 @@ package sipozizo.tabling.common.entity;
 
 // Store.java
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
+
 import java.time.LocalTime;
 
 @Getter
@@ -20,13 +22,13 @@ public class Store extends BaseEntity {
     private User user;
 
     @Column(name = "name")
-    private String name;
+    private String storeName;
 
     @Column(name = "store_number")
     private String storeNumber;
 
     @Column(name = "address")
-    private String address;
+    private String storeAddress;
 
     @Column(name = "registration_number")
     private String registrationNumber;
@@ -40,40 +42,20 @@ public class Store extends BaseEntity {
     @Column(name = "closing_time")
     private LocalTime closingTime;
 
+    @Column(name = "category")
+    private String category;
+
     @Column(name = "is_deleted")
     private boolean isDeleted;
 
-    // Update methods
-
-    public void updateName(String name) {
-        this.name = name;
-    }
-
-    public void updateStoreNumber(String storeNumber) {
+    @Builder
+    public Store(String storeName, String storeNumber, String storeAddress, String registrationNumber, LocalTime openingTime, LocalTime closingTime, String category) {
+        this.storeName = storeName;
         this.storeNumber = storeNumber;
-    }
-
-    public void updateAddress(String address) {
-        this.address = address;
-    }
-
-    public void updateRegistrationNumber(String registrationNumber) {
+        this.storeAddress = storeAddress;
         this.registrationNumber = registrationNumber;
-    }
-
-    public void updateView(int view) {
-        this.view = view;
-    }
-
-    public void updateOpeningTime(LocalTime openingTime) {
         this.openingTime = openingTime;
-    }
-
-    public void updateClosingTime(LocalTime closingTime) {
         this.closingTime = closingTime;
-    }
-
-    public void deleteStore() {
-        this.isDeleted = true;
+        this.category = category;
     }
 }
