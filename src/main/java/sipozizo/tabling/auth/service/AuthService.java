@@ -9,7 +9,7 @@ import sipozizo.tabling.auth.dto.request.UserRegisterRequest;
 import sipozizo.tabling.auth.dto.response.UserLoginResponse;
 import sipozizo.tabling.common.entity.User;
 import sipozizo.tabling.common.jwt.JwtUtil;
-import sipozizo.tabling.user.repository.UserRepository;
+import sipozizo.tabling.domain.user.repository.UserRepository;
 
 import java.util.NoSuchElementException;
 

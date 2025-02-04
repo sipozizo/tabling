@@ -7,7 +7,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import sipozizo.tabling.common.entity.User;
-import sipozizo.tabling.user.repository.UserRepository;
+import sipozizo.tabling.domain.user.repository.UserRepository;
 
 import java.util.NoSuchElementException;
 
