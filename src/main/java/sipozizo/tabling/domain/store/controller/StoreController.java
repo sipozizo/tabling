@@ -11,23 +11,39 @@ import sipozizo.tabling.domain.store.service.StoreService;
 import sipozizo.tabling.security.CustomUserDetails;
 
 @RestController
-@RequestMapping("api/v1/stores")
+@RequestMapping("/api/stores")
 @RequiredArgsConstructor
 public class StoreController {
 
     private final StoreService storeService;
 
+    /**
+     * 가게 생성 API - V1, V2 형태 동일
+     */
     @PostMapping
     public ResponseEntity<Void> createStore(@AuthenticationPrincipal CustomUserDetails userDetails,
-                                            @Validated @RequestBody StoreRequest request) {
+                                              @Validated @RequestBody StoreRequest request) {
         storeService.createStore(request);
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping("/{storeId}")
-    public ResponseEntity<StoreResponse> getStore(@AuthenticationPrincipal CustomUserDetails userDetails,
+    /**
+     * 캐싱 미적용 버전 (V1)
+     */
+    @GetMapping("/v1/{storeId}")
+    public ResponseEntity<StoreResponse> getStoreV1(@AuthenticationPrincipal CustomUserDetails userDetails,
+                                                    @PathVariable Long storeId) {
+        StoreResponse response = storeService.getStoreByIdV1(storeId);
+        return ResponseEntity.ok(response);
+    }
+
+    /**
+     * 캐싱 적용 버전 (V2)
+     */
+    @GetMapping("/v2/{storeId}")
+    public ResponseEntity<StoreResponse> getStoreV2(@AuthenticationPrincipal CustomUserDetails userDetails,
                                                   @PathVariable Long storeId) {
-        StoreResponse response = storeService.getStoreById(storeId);
+        StoreResponse response = storeService.getStoreByIdV2(storeId);
         return ResponseEntity.ok(response);
     }
 }

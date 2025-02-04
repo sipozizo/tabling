@@ -10,10 +10,6 @@ import sipozizo.tabling.common.entity.Store;
 import sipozizo.tabling.domain.store.model.request.StoreRequest;
 import sipozizo.tabling.domain.store.model.response.StoreResponse;
 import sipozizo.tabling.domain.store.repository.StoreRepository;
-import sipozizo.tabling.domain.user.repository.UserRepository;
-
-import java.sql.Time;
-import java.util.Optional;
 
 @Slf4j
 @Service
@@ -25,7 +21,7 @@ public class StoreService {
     private final StoreRepository storeRepository;
 
     /**
-     * 가게 생성
+     * 가게 생성 - V1, V2 형태 동일
      */
     @Transactional
     public void createStore(StoreRequest request) {
@@ -52,11 +48,22 @@ public class StoreService {
     }
 
     /**
-     * 가게 단건 조회 (캐싱 V1)
+     * 캐시 미적용 버전 (V1)
+     */
+    @Transactional(readOnly = true)
+    public StoreResponse getStoreByIdV1(Long storeId) {
+        Store store = storeRepository.findById(storeId)
+                .orElseThrow(() -> new IllegalArgumentException("조건에 맞는 가게가 존재하지 않습니다."));
+        return StoreResponse.fromEntity(store);
+    }
+
+    /**
+     * 캐시 적용 버전 (V2)
+     * 가게 단건 조회 @Cacheable 사용
      */
     @Cacheable(value = STORE_CACHE, key = "#storeId")
     @Transactional(readOnly = true)
-    public StoreResponse getStoreById(Long storeId) {
+    public StoreResponse getStoreByIdV2(Long storeId) {
         Store store = storeRepository.findById(storeId)
                 .orElseThrow(() -> new IllegalArgumentException("조건에 맞는 가게가 존재하지 않습니다.")); //todo 예외 처리 변경 예정
         return StoreResponse.fromEntity(store);
