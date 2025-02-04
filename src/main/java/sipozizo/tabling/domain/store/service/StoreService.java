@@ -1,17 +1,14 @@
 package sipozizo.tabling.domain.store.service;
 
-import com.querydsl.core.BooleanBuilder;
-import com.querydsl.jpa.impl.JPAQueryFactory;
+
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.support.PageableExecutionUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import sipozizo.tabling.common.entity.QStore;
 import sipozizo.tabling.common.entity.Store;
 import sipozizo.tabling.domain.store.model.request.StoreRequest;
 import sipozizo.tabling.domain.store.model.response.StoreResponse;
@@ -50,6 +47,7 @@ public class StoreService {
                 .openingTime(request.openingTime()) // NPE 방지
                 .closingTime(request.closingTime())
                 .category(request.category())
+                .maxSeatingCapacity(request.maxSeatingCapacity())
                 .build();
 
         storeRepository.save(store);

@@ -3,10 +3,12 @@ package sipozizo.tabling.domain.reservation.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import sipozizo.tabling.common.entity.Reservation;
 import sipozizo.tabling.domain.reservation.enums.ReservationStatus;
 import sipozizo.tabling.domain.reservation.service.ReservationServiceV2;
+import sipozizo.tabling.security.CustomUserDetails;
 
 import java.util.List;
 
@@ -19,16 +21,16 @@ public class ReservationControllerV2 {
 
     // 예약 생성 API
     @PostMapping
-    public ResponseEntity<Reservation> createReservation(@RequestParam Long reserverId,
+    public ResponseEntity<Reservation> createReservation(@AuthenticationPrincipal CustomUserDetails userDetails,
                                                          @RequestParam Long storeId) {
-        Reservation reservation = reservationServiceV2.createReservation(reserverId, storeId);
+        Reservation reservation = reservationServiceV2.createReservation(userDetails.getUserId(), storeId);
         return ResponseEntity.status(201).body(reservation);
     }
 
     @GetMapping("/store/{storeId}")
-    public ResponseEntity<List<Reservation>> getReservationsByStoreAndStatus(@PathVariable Long storeId,
+    public ResponseEntity<List<Reservation>> getReservationsByStoreAndStatus(@AuthenticationPrincipal CustomUserDetails userDetails,
                                                                              @RequestParam ReservationStatus status) {
-        List<Reservation> reservations = reservationServiceV2.getReservationsByStoreAndStatus(storeId, status);
+        List<Reservation> reservations = reservationServiceV2.getReservationsByStoreAndStatus(userDetails.getUserId(), status);
         return ResponseEntity.ok(reservations);
     }
 
