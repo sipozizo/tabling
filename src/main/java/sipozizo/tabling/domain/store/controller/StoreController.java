@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import sipozizo.tabling.domain.store.model.request.StoreRequest;
-import sipozizo.tabling.domain.store.model.response.StoreResponse;
 import sipozizo.tabling.domain.store.service.StoreService;
 import sipozizo.tabling.security.CustomUserDetails;
 

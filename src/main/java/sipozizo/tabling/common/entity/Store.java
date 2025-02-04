@@ -2,6 +2,7 @@ package sipozizo.tabling.common.entity;
 
 // Store.java
 import jakarta.persistence.*;
+
 import lombok.Builder;
 import lombok.Getter;
 
@@ -21,7 +22,7 @@ public class Store extends BaseEntity {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @Column(name = "name")
+    @Column(name = "store_name")
     private String storeName;
 
     @Column(name = "store_number")
@@ -41,6 +42,9 @@ public class Store extends BaseEntity {
 
     @Column(name = "closing_time")
     private LocalTime closingTime;
+
+    @Column(name = "is_deleted")
+    private boolean isDeleted;
 
     @Column(name = "category")
     private String category;

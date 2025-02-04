@@ -14,6 +14,7 @@ import sipozizo.tabling.domain.user.repository.UserRepository;
 @Service
 @AllArgsConstructor
 public class StoreService {
+
     private final CacheManager cacheManager;
     private final StoreRepository storeRepository;
     private final UserRepository userRepository;
