@@ -17,6 +17,7 @@ import java.util.Optional;
 @Service
 @AllArgsConstructor
 public class StoreService {
+
     private final CacheManager cacheManager;
     private final StoreRepository storeRepository;
     private final UserRepository userRepository;
@@ -37,7 +38,7 @@ public class StoreService {
                 .storeNumber(request.storeNumber())
                 .storeAddress(request.storeAddress())
                 .registrationNumber(request.registrationNumber())
-                .openingTime(Optional.ofNullable(request.openingTime()).map(Time::toLocalTime).orElse(null))
+                .openingTime(Optional.ofNullable(request.openingTime()).map(Time::toLocalTime).orElse(null)) // NPE 방지
                 .closingTime(Optional.ofNullable(request.closingTime()).map(Time::toLocalTime).orElse(null))
                 .category(request.category())
                 .build();
