@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 public class ReservationResponse {
     private Long id;
     private Long reserverId;
-    private LocalDateTime reservationTime;
+    private Long storeId;
     private ReservationStatus reservationStatus;
-
+    private Integer waitingNumber;
 }
