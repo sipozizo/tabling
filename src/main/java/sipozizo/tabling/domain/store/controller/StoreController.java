@@ -13,6 +13,8 @@ import sipozizo.tabling.domain.store.model.response.StoreResponse;
 import sipozizo.tabling.domain.store.service.StoreService;
 import sipozizo.tabling.security.CustomUserDetails;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/stores")
 @RequiredArgsConstructor
@@ -31,7 +33,7 @@ public class StoreController {
     }
 
     /**
-     * 캐싱 미적용 버전 (V1)
+     * 캐싱 미적용 버전 가게 단건 조회 API (V1)
      */
     @GetMapping("/v1/{storeId}")
     public ResponseEntity<StoreResponse> getStoreV1(@AuthenticationPrincipal CustomUserDetails userDetails,
@@ -40,11 +42,14 @@ public class StoreController {
         return ResponseEntity.ok(response);
     }
 
+    /**
+     * 캐싱 미적용 버전 가게 전체 조회 API (V1)
+     */
     @GetMapping("/v1")
     public ResponseEntity<Page<StoreResponse>> getAllStoresV1(
             @RequestParam(required = false) String keyword,
-            @RequestParam (defaultValue = "1") int page,
-            @RequestParam (defaultValue = "35") int size) {
+            @RequestParam(defaultValue = "1") int page,
+            @RequestParam(defaultValue = "35") int size) {
         Pageable pageable = PageRequest.of(page -1 ,size);
 
         Page<StoreResponse> response = storeService.getAllStoresV1(keyword, pageable);
@@ -52,12 +57,35 @@ public class StoreController {
     }
 
     /**
-     * 캐싱 적용 버전 (V2)
+     * 캐싱 적용 버전 가게 단건 조회 API (V2)
      */
     @GetMapping("/v2/{storeId}")
     public ResponseEntity<StoreResponse> getStoreV2(@AuthenticationPrincipal CustomUserDetails userDetails,
                                                   @PathVariable Long storeId) {
         StoreResponse response = storeService.getStoreByIdV2(storeId);
         return ResponseEntity.ok(response);
+    }
+
+    /**
+     * 캐싱 적용 버전 가게 전체 조회 API (V2)
+     */
+    @GetMapping("/v2")
+    public ResponseEntity<Page<StoreResponse>> getAllStoresV2(
+            @RequestParam(required = false) String keyword,
+            @RequestParam(defaultValue = "1") int page,
+            @RequestParam(defaultValue = "35") int size) {
+        Pageable pageable = PageRequest.of(page - 1, size);
+
+        Page<StoreResponse> response = storeService.getAllStoresV2(keyword, pageable);
+        return ResponseEntity.ok(response);
+    }
+
+    /**
+     * 인기 검색어 조회 API
+     */
+    @GetMapping("/popular-keywords")
+    public ResponseEntity<List<String>> getPopularKeywords() {
+        List<String> keywords = storeService.getPopularKeywords();
+        return ResponseEntity.ok(keywords);
     }
 }
