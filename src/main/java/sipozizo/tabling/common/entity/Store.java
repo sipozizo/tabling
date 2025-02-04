@@ -51,8 +51,12 @@ public class Store extends BaseEntity {
     @Column(name = "is_deleted")
     private boolean isDeleted;
 
+    //    착석 한계 개념 추가
+    @Column(name = "max_seating_capacity")
+    private int maxSeatingCapacity;
+
     @Builder
-    public Store(String storeName, String storeNumber, String storeAddress, String registrationNumber, LocalTime openingTime, LocalTime closingTime, String category) {
+    public Store(String storeName, String storeNumber, String storeAddress, String registrationNumber, LocalTime openingTime, LocalTime closingTime, String category, int maxSeatingCapacity) {
         this.storeName = storeName;
         this.storeNumber = storeNumber;
         this.storeAddress = storeAddress;
@@ -60,5 +64,6 @@ public class Store extends BaseEntity {
         this.openingTime = openingTime;
         this.closingTime = closingTime;
         this.category = category;
+        this.maxSeatingCapacity = maxSeatingCapacity;
     }
 }
