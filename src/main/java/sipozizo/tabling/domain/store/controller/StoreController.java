@@ -28,7 +28,7 @@ public class StoreController {
     @PostMapping
     public ResponseEntity<Void> createStore(@AuthenticationPrincipal CustomUserDetails userDetails,
                                               @Validated @RequestBody StoreRequest request) {
-        storeService.createStore(request);
+        storeService.createStore(userDetails.getUserId(), request);
         return ResponseEntity.ok().build();
     }
 

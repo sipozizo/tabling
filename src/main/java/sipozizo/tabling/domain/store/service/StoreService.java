@@ -33,7 +33,7 @@ public class StoreService {
      * 가게 생성 - V1, V2 형태 동일
      */
     @Transactional
-    public void createStore(StoreRequest request) {
+    public void createStore(Long userId, StoreRequest request) {
 
         if (storeRepository.existsByStoreName(request.storeName())) {
             throw new IllegalArgumentException("이미 존재하는 가게입니다."); //todo 예외처리 변경 예정
@@ -103,10 +103,11 @@ public class StoreService {
 
     /**
      * 캐시 적용 버전 가게 전체 조회 (V2)
+     * TODO PageDTO 로 감싸기
      */
-    @Cacheable(value = STORE_KEYWORD_CACHE, key = "#keyword")
+    @Cacheable(value = STORE_KEYWORD_CACHE, key = "#keyword + '_' + #pageable.pageNumber") // 페이지는 계속 바뀌는데 키워드만으로 캐싱을 하기에는 무리가 있어서 에러가 발생했다..언더바로 더해서 페이지 넘버까지 같이 캐싱
     @Transactional(readOnly = true)
-    public Page<StoreResponse> getAllStoresV2(String keyword, Pageable pageable) {
+    public Page<StoreResponse> getAllStoresV2(String keyword, Pageable pageable) { // TODO 레디스로 바꿀 때 직렬화 문제 해결하기
 
         if (keyword != null && !keyword.isBlank()) {
             savePopularKeyword(keyword);
