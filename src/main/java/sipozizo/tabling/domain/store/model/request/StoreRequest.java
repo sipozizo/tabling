@@ -4,8 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
-
-import java.sql.Time;
+import java.time.LocalTime;
 
 public record StoreRequest(
         @NotBlank(message = "가게명은 필수 입력값입니다.")
@@ -28,11 +27,11 @@ public record StoreRequest(
 
         @JsonFormat(pattern = "HH:mm:ss")
         @NotNull(message = "가게 개시시간은 필수 입력값입니다. 00:00:00 형식으로 입력해주세요.")
-        Time openingTime,
+        LocalTime openingTime,
 
         @JsonFormat(pattern = "HH:mm:ss")
         @NotNull(message = "가게 마감시간은 필수 입력값입니다. 00:00:00 형식으로 입력해주세요.")
-        Time closingTime,
+        LocalTime closingTime,
 
         @NotBlank(message = "가게 카테고리는 필수 입력값입니다.")
         String category

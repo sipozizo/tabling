@@ -3,10 +3,12 @@ package sipozizo.tabling.domain.store.service;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.CacheManager;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import sipozizo.tabling.common.entity.Store;
 import sipozizo.tabling.domain.store.model.request.StoreRequest;
+import sipozizo.tabling.domain.store.model.response.StoreResponse;
 import sipozizo.tabling.domain.store.repository.StoreRepository;
 import sipozizo.tabling.domain.user.repository.UserRepository;
 
@@ -18,10 +20,13 @@ import java.util.Optional;
 @AllArgsConstructor
 public class StoreService {
 
+    private static final String STORE_CACHE = "stores";
     private final CacheManager cacheManager;
     private final StoreRepository storeRepository;
-    private final UserRepository userRepository;
 
+    /**
+     * 가게 생성
+     */
     @Transactional
     public void createStore(StoreRequest request) {
 
@@ -38,11 +43,22 @@ public class StoreService {
                 .storeNumber(request.storeNumber())
                 .storeAddress(request.storeAddress())
                 .registrationNumber(request.registrationNumber())
-                .openingTime(Optional.ofNullable(request.openingTime()).map(Time::toLocalTime).orElse(null)) // NPE 방지
-                .closingTime(Optional.ofNullable(request.closingTime()).map(Time::toLocalTime).orElse(null))
+                .openingTime(request.openingTime()) // NPE 방지
+                .closingTime(request.closingTime())
                 .category(request.category())
                 .build();
 
         storeRepository.save(store);
+    }
+
+    /**
+     * 가게 단건 조회 (캐싱 V1)
+     */
+    @Cacheable(value = STORE_CACHE, key = "#storeId")
+    @Transactional(readOnly = true)
+    public StoreResponse getStoreById(Long storeId) {
+        Store store = storeRepository.findById(storeId)
+                .orElseThrow(() -> new IllegalArgumentException("조건에 맞는 가게가 존재하지 않습니다.")); //todo 예외 처리 변경 예정
+        return StoreResponse.fromEntity(store);
     }
 }

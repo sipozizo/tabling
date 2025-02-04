@@ -20,7 +20,7 @@ public class Store extends BaseEntity {
     private Long id;
 
     // user_id
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
 
