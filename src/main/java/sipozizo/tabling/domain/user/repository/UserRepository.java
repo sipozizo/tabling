@@ -1,4 +1,4 @@
-package sipozizo.tabling.user.repository;
+package sipozizo.tabling.domain.user.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import sipozizo.tabling.common.entity.User;
