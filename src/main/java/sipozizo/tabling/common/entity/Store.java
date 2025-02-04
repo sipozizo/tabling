@@ -30,7 +30,7 @@ public class Store extends BaseEntity {
     @Column(name = "store_number")
     private String storeNumber;
 
-    @Column(name = "address")
+    @Column(name = "store_address")
     private String storeAddress;
 
     @Column(name = "registration_number")

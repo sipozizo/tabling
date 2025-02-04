@@ -1,6 +1,9 @@
 package sipozizo.tabling.domain.store.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.annotation.Validated;
@@ -34,6 +37,17 @@ public class StoreController {
     public ResponseEntity<StoreResponse> getStoreV1(@AuthenticationPrincipal CustomUserDetails userDetails,
                                                     @PathVariable Long storeId) {
         StoreResponse response = storeService.getStoreByIdV1(storeId);
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/v1")
+    public ResponseEntity<Page<StoreResponse>> getAllStoresV1(
+            @RequestParam(required = false) String keyword,
+            @RequestParam (defaultValue = "1") int page,
+            @RequestParam (defaultValue = "35") int size) {
+        Pageable pageable = PageRequest.of(page -1 ,size);
+
+        Page<StoreResponse> response = storeService.getAllStoresV1(keyword, pageable);
         return ResponseEntity.ok(response);
     }
 
