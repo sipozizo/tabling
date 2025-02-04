@@ -7,11 +7,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import sipozizo.tabling.domain.store.model.response.StoreWithViewCountResponseV1;
-import sipozizo.tabling.domain.store.model.response.StoreWithViewCountResponseV2;
 import sipozizo.tabling.domain.store.service.RedisStoreService;
 
 @RestController
-@RequestMapping("/api/stores")
+@RequestMapping("/api/redis-stores")
 @RequiredArgsConstructor
 public class RedisStoreController {
 
