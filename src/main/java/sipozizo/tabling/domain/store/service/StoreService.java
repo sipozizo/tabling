@@ -51,6 +51,7 @@ public class StoreService {
                 .openingTime(request.openingTime()) // NPE 방지
                 .closingTime(request.closingTime())
                 .category(request.category())
+                .maxSeatingCapacity(request.maxSeatingCapacity())
                 .build();
 
         storeRepository.save(store);

@@ -34,6 +34,9 @@ public record StoreRequest(
         LocalTime closingTime,
 
         @NotBlank(message = "가게 카테고리는 필수 입력값입니다.")
-        String category
-        ) {
+        String category,
+
+        @NotBlank(message = "입장 가능 숫자를 입력하십시오.")
+        Integer maxSeatingCapacity
+) {
 }

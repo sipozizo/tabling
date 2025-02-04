@@ -16,7 +16,7 @@ public class Reservation extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // reserver_id
+    // reserver_id TODO: 존재하는 영어로
     @ManyToOne
     @JoinColumn(name = "reserver_id")
     private User reserver;
