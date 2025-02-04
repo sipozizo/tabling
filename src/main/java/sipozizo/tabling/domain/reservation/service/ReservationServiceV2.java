@@ -7,21 +7,24 @@ import sipozizo.tabling.common.entity.Reservation;
 import sipozizo.tabling.common.entity.ReservationStatus;
 import sipozizo.tabling.common.entity.Store;
 import sipozizo.tabling.common.entity.User;
-import sipozizo.tabling.common.lock.service.LockService;
+import sipozizo.tabling.common.lock.service.RedisLockServiceV3;
 import sipozizo.tabling.domain.reservation.repository.ReservationRepository;
 import sipozizo.tabling.domain.store.repository.StoreRepository;
 import sipozizo.tabling.temp.UserRepository;
 
 import java.util.List;
 
+
 @Service
 @RequiredArgsConstructor
-public class ReservationService {
+public class ReservationServiceV2 {
+
+    private final RedisLockServiceV3 redisLockServiceV3;
+    private final ReservationUpdateServiceV2 reservationUpdateServiceV2;
 
     private final ReservationRepository reservationRepository;
     private final UserRepository userRepository;
-    private final LockService lockService;
-    private final ReservationUpdateService reservationUpdateService;
+    private final WaitingNumberServiceV2 waitingNumberService; // 추가
     private final StoreRepository storeRepository;
 
     @Transactional
@@ -32,26 +35,23 @@ public class ReservationService {
         Store store = storeRepository.findById(storeId)
                 .orElseThrow(() -> new IllegalArgumentException("Cannot find store with ID: " + storeId));
 
-        Reservation reservation = lockService.executeWithLock("store:" + storeId, () -> {
-            Integer lastWaitingNumber = reservationRepository.findLastWaitingNumberByStore(store);
-            Integer newWaitingNumber = (lastWaitingNumber == null) ? 1 : lastWaitingNumber + 1;
+//        원자적 증가 연산('INCR' 명령) 사용
+        Integer newWaitingNumber = waitingNumberService.getNextWaitingNumber(storeId);
 
-            Reservation newReservation = new Reservation(reserver, ReservationStatus.WAITING, store);
-            newReservation.setWaitingNumber(newWaitingNumber);
+        Reservation newReservation = new Reservation(reserver, ReservationStatus.WAITING, store);
+        newReservation.setWaitingNumber(newWaitingNumber);
 
-            if (newWaitingNumber <= store.getMaxSeatingCapacity()) {
-                newReservation.updateReservationStatus(ReservationStatus.CALLED);
-            }
+        if (newWaitingNumber <= store.getMaxSeatingCapacity()) {
+            newReservation.updateReservationStatus(ReservationStatus.CALLED);
+        }
 
-            return reservationRepository.save(newReservation);
-        });
-
-        return reservation;
+        return reservationRepository.save(newReservation);
     }
 
     public void updateReservationStatus(Long reservationId, ReservationStatus status) {
         String lockKey = "reservation:" + reservationId;
-        lockService.executeWithLock(lockKey, () -> reservationUpdateService.updateStatus(reservationId, status));
+//        TODO: 분산 락에 맞게 추후 수정
+//        redisLockServiceV3.executeWithLock(lockKey, () -> reservationUpdateServiceV2.updateStatus(reservationId, status));
     }
 
 
