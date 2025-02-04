@@ -72,6 +72,7 @@ dependencies {
     // jackson이 LocalTime을 지원할수 있게 하는 의존성 추가
     implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310'
 }
+clean { delete file('src/main/generated') }
 
 tasks.named('test') {
     useJUnitPlatform()

@@ -2,7 +2,7 @@ package sipozizo.tabling.common.entity;
 
 // Store.java
 import jakarta.persistence.*;
-
+import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,7 +12,7 @@ import java.time.LocalTime;
 @Getter
 @Entity
 @Table(name = "stores")
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Store extends BaseEntity {
 
     @Id
@@ -20,7 +20,7 @@ public class Store extends BaseEntity {
     private Long id;
 
     // user_id
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
 
@@ -30,7 +30,7 @@ public class Store extends BaseEntity {
     @Column(name = "store_number")
     private String storeNumber;
 
-    @Column(name = "address")
+    @Column(name = "store_address")
     private String storeAddress;
 
     @Column(name = "registration_number")
@@ -45,15 +45,16 @@ public class Store extends BaseEntity {
     @Column(name = "closing_time")
     private LocalTime closingTime;
 
-    @Column(name = "is_deleted")
-    private boolean isDeleted;
-
     @Column(name = "category")
     private String category;
 
 
+    //    착석 한계 개념 추가
+    @Column(name = "max_seating_capacity")
+    private Integer maxSeatingCapacity;
+
     @Builder
-    public Store(String storeName, String storeNumber, String storeAddress, String registrationNumber, LocalTime openingTime, LocalTime closingTime, String category) {
+    public Store(String storeName, String storeNumber, String storeAddress, String registrationNumber, LocalTime openingTime, LocalTime closingTime, String category, Integer maxSeatingCapacity) {
         this.storeName = storeName;
         this.storeNumber = storeNumber;
         this.storeAddress = storeAddress;
@@ -61,6 +62,7 @@ public class Store extends BaseEntity {
         this.openingTime = openingTime;
         this.closingTime = closingTime;
         this.category = category;
+        this.maxSeatingCapacity = maxSeatingCapacity;
     }
 
     public void incrementViewCount() {
