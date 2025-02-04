@@ -5,12 +5,14 @@ import jakarta.persistence.*;
 
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalTime;
 
 @Getter
 @Entity
 @Table(name = "stores")
+@NoArgsConstructor
 public class Store extends BaseEntity {
 
     @Id
@@ -49,8 +51,6 @@ public class Store extends BaseEntity {
     @Column(name = "category")
     private String category;
 
-    @Column(name = "is_deleted")
-    private boolean isDeleted;
 
     @Builder
     public Store(String storeName, String storeNumber, String storeAddress, String registrationNumber, LocalTime openingTime, LocalTime closingTime, String category) {
@@ -61,5 +61,12 @@ public class Store extends BaseEntity {
         this.openingTime = openingTime;
         this.closingTime = closingTime;
         this.category = category;
+    }
+
+    public void incrementViewCount() {
+        if (this.view == 0) {
+            this.view = 1;
+        }
+        this.view++;
     }
 }
