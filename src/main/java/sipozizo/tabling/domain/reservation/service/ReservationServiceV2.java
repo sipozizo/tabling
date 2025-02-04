@@ -7,7 +7,6 @@ import sipozizo.tabling.common.entity.Reservation;
 import sipozizo.tabling.domain.reservation.enums.ReservationStatus;
 import sipozizo.tabling.common.entity.Store;
 import sipozizo.tabling.common.entity.User;
-import sipozizo.tabling.common.lock.service.RedisLockServiceV3;
 import sipozizo.tabling.domain.reservation.repository.ReservationRepository;
 import sipozizo.tabling.domain.store.repository.StoreRepository;
 import sipozizo.tabling.domain.user.repository.UserRepository;
@@ -19,41 +18,38 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ReservationServiceV2 {
 
-    private final RedisLockServiceV3 redisLockServiceV3;
-    private final ReservationUpdateServiceV2 reservationUpdateServiceV2;
-
     private final ReservationRepository reservationRepository;
     private final UserRepository userRepository;
-    private final WaitingNumberServiceV2 waitingNumberService; // 추가
+    private final WaitingNumberServiceV2 waitingNumberService;
     private final StoreRepository storeRepository;
 
     @Transactional
-    public Reservation createReservation(Long reserverId, Long storeId) {
-        User reserver = userRepository.findById(reserverId)
-                .orElseThrow(() -> new IllegalArgumentException("Cannot find reserver with ID: " + reserverId));
+    public Reservation createReservation(Long customerId, Long storeId) {
+        User customer = userRepository.findById(customerId)
+                .orElseThrow(() -> new IllegalArgumentException("Cannot find customer with ID: " + customerId));
 
         Store store = storeRepository.findById(storeId)
                 .orElseThrow(() -> new IllegalArgumentException("Cannot find store with ID: " + storeId));
 
-//        원자적 증가 연산('INCR' 명령) 사용
+        // Redis를 이용한 대기 번호 생성
         Integer newWaitingNumber = waitingNumberService.getNextWaitingNumber(storeId);
 
-        Reservation newReservation = new Reservation(reserver, ReservationStatus.WAITING, store);
+        Reservation newReservation = new Reservation(customer, ReservationStatus.WAITING, store);
         newReservation.setWaitingNumber(newWaitingNumber);
+        reservationRepository.save(newReservation);
 
-        if (newWaitingNumber <= store.getMaxSeatingCapacity()) {
-            newReservation.updateReservationStatus(ReservationStatus.CALLED);
+        // 수용량 확인 및 예약 상태 업데이트
+        if (!isStoreAtCapacity(store)) {
+            List<Reservation> waitingReservations = reservationRepository.findByStoreAndReservationStatusOrderByWaitingNumberAsc(
+                    store, ReservationStatus.WAITING);
+            if (waitingReservations.isEmpty() || waitingReservations.get(0).getId().equals(newReservation.getId())) {
+                newReservation.updateReservationStatus(ReservationStatus.CALLED);
+                reservationRepository.save(newReservation);
+            }
         }
 
-        return reservationRepository.save(newReservation);
+        return newReservation;
     }
-
-    public void updateReservationStatus(Long reservationId, ReservationStatus status) {
-        String lockKey = "reservation:" + reservationId;
-//        TODO: 분산 락에 맞게 추후 수정
-//        redisLockServiceV3.executeWithLock(lockKey, () -> reservationUpdateServiceV2.updateStatus(reservationId, status));
-    }
-
 
     @Transactional(readOnly = true)
     public List<Reservation> getReservationsByStoreAndStatus(Long storeId, ReservationStatus status) {
@@ -63,7 +59,7 @@ public class ReservationServiceV2 {
     }
 
     @Transactional
-    public void completePayment(Long reservationId) {
+    public void completeReservation(Long reservationId) {
         Reservation reservation = reservationRepository.findById(reservationId)
                 .orElseThrow(() -> new IllegalArgumentException("Cannot find reservation with ID: " + reservationId));
 
@@ -74,15 +70,44 @@ public class ReservationServiceV2 {
         reservation.updateReservationStatus(ReservationStatus.EMPTIED);
         reservationRepository.save(reservation);
 
-        callNextCustomer(reservation.getStore());
+        // 수용량 확인 및 대기 중인 예약 처리
+        handleAvailableCapacity(reservation.getStore());
     }
 
-    private void callNextCustomer(Store store) {
-        Reservation nextReservation = reservationRepository.findFirstByStoreAndReservationStatusOrderByWaitingNumberAsc(
-                store, ReservationStatus.WAITING);
-        if (nextReservation != null) {
-            nextReservation.updateReservationStatus(ReservationStatus.CALLED);
-            reservationRepository.save(nextReservation);
+    @Transactional
+    public void cancelReservation(Long reservationId) {
+        Reservation reservation = reservationRepository.findById(reservationId)
+                .orElseThrow(() -> new IllegalArgumentException("Cannot find reservation with ID: " + reservationId));
+
+        if (reservation.getReservationStatus() == ReservationStatus.CANCELLED ||
+                reservation.getReservationStatus() == ReservationStatus.EMPTIED) {
+            throw new IllegalStateException("Reservation is already cancelled or emptied.");
         }
+
+        reservation.updateReservationStatus(ReservationStatus.CANCELLED);
+        reservationRepository.save(reservation);
+
+        // 수용량 확인 및 대기 중인 예약 처리
+        handleAvailableCapacity(reservation.getStore());
+    }
+
+    // 수용량 확인 및 대기 중인 예약 호출
+    private void handleAvailableCapacity(Store store) {
+        if (!isStoreAtCapacity(store)) {
+            // 대기 중인 예약 중 가장 오래된 예약을 CALLED로 변경
+            Reservation nextReservation = reservationRepository.findFirstByStoreAndReservationStatusOrderByWaitingNumberAsc(
+                    store, ReservationStatus.WAITING);
+            if (nextReservation != null) {
+                nextReservation.updateReservationStatus(ReservationStatus.CALLED);
+                reservationRepository.save(nextReservation);
+            }
+        }
+    }
+
+    // 매장의 현재 수용 인원 확인 (SEATED + CALLED)
+    private boolean isStoreAtCapacity(Store store) {
+        int currentCount = reservationRepository.countByStoreAndReservationStatusIn(
+                store, List.of(ReservationStatus.SEATED, ReservationStatus.CALLED));
+        return currentCount >= store.getMaxSeatingCapacity();
     }
 }
