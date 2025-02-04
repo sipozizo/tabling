@@ -8,7 +8,7 @@ import sipozizo.tabling.domain.reservation.repository.ReservationRepository;
 import sipozizo.tabling.domain.reservation.service.ReservationServiceV1;
 import sipozizo.tabling.domain.reservation.service.ReservationServiceV2;
 import sipozizo.tabling.domain.store.repository.StoreRepository;
-import sipozizo.tabling.temp.UserRepository;
+import sipozizo.tabling.domain.user.repository;
 
 import java.time.LocalTime;
 import java.util.ArrayList;
