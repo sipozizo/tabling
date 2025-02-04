@@ -53,10 +53,10 @@ public class Store extends BaseEntity {
 
     //    착석 한계 개념 추가
     @Column(name = "max_seating_capacity")
-    private int maxSeatingCapacity;
+    private Integer maxSeatingCapacity;
 
     @Builder
-    public Store(String storeName, String storeNumber, String storeAddress, String registrationNumber, LocalTime openingTime, LocalTime closingTime, String category, int maxSeatingCapacity) {
+    public Store(String storeName, String storeNumber, String storeAddress, String registrationNumber, LocalTime openingTime, LocalTime closingTime, String category, Integer maxSeatingCapacity) {
         this.storeName = storeName;
         this.storeNumber = storeNumber;
         this.storeAddress = storeAddress;
