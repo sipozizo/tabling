@@ -1,4 +1,4 @@
-package sipozizo.tabling.common.entity;
+package sipozizo.tabling.domain.reservation.enums;
 
 public enum ReservationStatus {
     WAITING,   //

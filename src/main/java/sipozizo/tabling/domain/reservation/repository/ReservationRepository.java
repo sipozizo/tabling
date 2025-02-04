@@ -5,7 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import sipozizo.tabling.common.entity.Reservation;
-import sipozizo.tabling.common.entity.ReservationStatus;
+import sipozizo.tabling.domain.reservation.enums.ReservationStatus;
 import sipozizo.tabling.common.entity.Store;
 
 import java.util.List;

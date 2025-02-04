@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.support.TransactionTemplate;
 import sipozizo.tabling.common.entity.Reservation;
-import sipozizo.tabling.common.entity.ReservationStatus;
+import sipozizo.tabling.domain.reservation.enums.ReservationStatus;
 import sipozizo.tabling.domain.reservation.repository.ReservationRepository;
 
 

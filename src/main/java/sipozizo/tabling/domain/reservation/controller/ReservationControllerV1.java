@@ -5,11 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import sipozizo.tabling.common.entity.Reservation;
-import sipozizo.tabling.common.entity.ReservationStatus;
 import sipozizo.tabling.domain.reservation.service.ReservationServiceV1;
-import sipozizo.tabling.domain.reservation.service.ReservationServiceV2;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/reservations")

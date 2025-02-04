@@ -9,13 +9,13 @@ import org.springframework.test.context.ActiveProfiles;
 import sipozizo.tabling.common.entity.Reservation;
 import sipozizo.tabling.common.entity.Store;
 import sipozizo.tabling.common.entity.User;
-import sipozizo.tabling.common.entity.UserRole;
 import sipozizo.tabling.domain.reservation.repository.ReservationRepository;
 import sipozizo.tabling.domain.reservation.service.ReservationServiceV1;
 import sipozizo.tabling.domain.reservation.service.ReservationServiceV2;
 import sipozizo.tabling.domain.reservation.service.ReservationServiceV3;
 import sipozizo.tabling.domain.store.repository.StoreRepository;
-import sipozizo.tabling.temp.UserRepository;
+import sipozizo.tabling.domain.user.enums.UserRole;
+import sipozizo.tabling.domain.user.repository.UserRepository;
 
 import java.time.LocalTime;
 import java.util.*;
@@ -73,13 +73,11 @@ public class TablingWaitingNumTests {
         userRepository.save(storeOwner);
 
         // 매장 생성
-        Store store = Store.createTestStore(
-                storeOwner,                     // user (매장 주인)
+        Store store = createTestStore(
                 "Test Store",                   // name
                 "02-1234-5678",                 // storeNumber
                 "Store Address",                // address
                 "123-45-67890",                 // registrationNumber
-                0,                              // view
                 LocalTime.of(9, 0),             // openingTime
                 LocalTime.of(18, 0),            // closingTime
                 50                              // maxSeatingCapacity
@@ -161,13 +159,11 @@ public class TablingWaitingNumTests {
         userRepository.save(storeOwner);
 
         // 매장 생성
-        Store store = Store.createTestStore(
-                storeOwner,                     // user (매장 주인)
+        Store store = createTestStore(
                 "Test Store",                   // name
                 "02-1234-5678",                 // storeNumber
                 "Store Address",                // address
                 "123-45-67890",                 // registrationNumber
-                0,                              // view
                 LocalTime.of(9, 0),             // openingTime
                 LocalTime.of(18, 0),            // closingTime
                 50                              // maxSeatingCapacity
@@ -250,13 +246,11 @@ public class TablingWaitingNumTests {
         userRepository.save(storeOwner);
 
         // 매장 생성
-        Store store = Store.createTestStore(
-                storeOwner,                     // user (매장 주인)
+        Store store = createTestStore(
                 "Test Store",                   // name
                 "02-1234-5678",                 // storeNumber
                 "Store Address",                // address
                 "123-45-67890",                 // registrationNumber
-                0,                              // view
                 LocalTime.of(9, 0),             // openingTime
                 LocalTime.of(18, 0),            // closingTime
                 50                              // maxSeatingCapacity
@@ -319,4 +313,20 @@ public class TablingWaitingNumTests {
         // Assert를 통해 중복 여부 확인
 //        assertThat(duplicateWaitingNumbers.size()).isEqualTo(0);
     }
+
+    private Store createTestStore(String storeName, String storeNumber, String storeAddress,
+                                        String registrationNumber, LocalTime openingTime,
+                                        LocalTime closingTime, int maxSeatingCapacity) {
+        return Store.builder()
+                .storeName(storeName)
+                .storeNumber(storeNumber)
+                .storeAddress(storeAddress)
+                .registrationNumber(registrationNumber)
+                .openingTime(openingTime)
+                .closingTime(closingTime)
+                .maxSeatingCapacity(maxSeatingCapacity)
+                .build();
+    }
+
+
 }

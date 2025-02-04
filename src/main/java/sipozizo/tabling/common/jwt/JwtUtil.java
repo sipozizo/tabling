@@ -6,10 +6,9 @@ import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
-import sipozizo.tabling.entity.UserRole;
+import sipozizo.tabling.domain.user.enums.UserRole;
 
 import java.security.Key;
-import java.security.SignatureException;
 import java.util.Base64;
 import java.util.Date;
 
@@ -20,6 +19,7 @@ public class JwtUtil {
     private static final String PREFIX = "Bearer ";
     private final long TOKEN_TIME = 60 * 60 * 1000L; // 60분
     private final SignatureAlgorithm signatureAlgorithm = SignatureAlgorithm.HS256;
+
     @Value("${jwt.secret.key}")
     private String secretKey;
     private Key key;
@@ -28,10 +28,6 @@ public class JwtUtil {
     public void init() {
         byte[] bytes = Base64.getDecoder().decode(secretKey);
         key = Keys.hmacShaKeyFor(bytes);
-    }
-
-    public String extractUsername(String token) {
-        return extractAllClaims(token).getSubject();
     }
 
     private Claims extractAllClaims(String token) {
@@ -56,16 +52,9 @@ public class JwtUtil {
         return PREFIX + token;
     }
 
-
-
     public Long extractUserId(String token) {
         return Long.parseLong(extractAllClaims(token).getSubject());
     }
-
-    public String extractRoles(String token) {
-        return extractAllClaims(token).get("role", String.class);
-    }
-
 
     public boolean validateToken(String token) {
         try {

@@ -4,11 +4,13 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import sipozizo.tabling.common.entity.*;
+import sipozizo.tabling.domain.reservation.enums.ReservationStatus;
 import sipozizo.tabling.domain.reservation.repository.ReservationRepository;
 import sipozizo.tabling.domain.reservation.service.ReservationServiceV1;
 import sipozizo.tabling.domain.reservation.service.ReservationServiceV2;
 import sipozizo.tabling.domain.store.repository.StoreRepository;
-import sipozizo.tabling.temp.UserRepository;
+import sipozizo.tabling.domain.user.enums.UserRole;
+import sipozizo.tabling.domain.user.repository.UserRepository;
 
 import java.time.LocalTime;
 import java.util.ArrayList;
@@ -139,13 +141,11 @@ class TablingApplicationTests {
         userRepository.save(owner);
 
         // Store 생성 (createTestStore 메서드 사용)
-        Store store = Store.createTestStore(
-                owner,
+        Store store = createTestStore(
                 "테스트 스토어",
                 "02-1234-5678",
                 "서울시 테스트구 테스트동",
                 "123-45-67890",
-                0, // view (초기값 0)
                 LocalTime.of(9, 0),
                 LocalTime.of(22, 0),
                 10 // maxSeatingCapacity (최대 착석 인원 설정)
@@ -296,13 +296,11 @@ class TablingApplicationTests {
         userRepository.save(owner);
 
         // Store 생성
-        Store store = Store.createTestStore(
-                owner,
+        Store store = createTestStore(
                 "테스트 스토어",
                 "02-1234-5678",
                 "서울시 테스트구 테스트동",
                 "123-45-67890",
-                0,
                 LocalTime.of(9, 0),
                 LocalTime.of(22, 0),
                 100 // 최대 착석 인원 설정 (테스트를 위해 큰 값 설정)
@@ -322,4 +320,19 @@ class TablingApplicationTests {
         }
         return users;
     }
+
+    private Store createTestStore(String storeName, String storeNumber, String storeAddress,
+                                        String registrationNumber, LocalTime openingTime,
+                                        LocalTime closingTime, int maxSeatingCapacity) {
+        return Store.builder()
+                .storeName(storeName)
+                .storeNumber(storeNumber)
+                .storeAddress(storeAddress)
+                .registrationNumber(registrationNumber)
+                .openingTime(openingTime)
+                .closingTime(closingTime)
+                .maxSeatingCapacity(maxSeatingCapacity)
+                .build();
+    }
+
 }

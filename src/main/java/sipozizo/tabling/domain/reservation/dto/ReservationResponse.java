@@ -1,9 +1,7 @@
 package sipozizo.tabling.domain.reservation.dto;
 
 import lombok.Getter;
-import sipozizo.tabling.common.entity.ReservationStatus;
-
-import java.time.LocalDateTime;
+import sipozizo.tabling.domain.reservation.enums.ReservationStatus;
 
 @Getter
 public class ReservationResponse {
