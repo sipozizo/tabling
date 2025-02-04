@@ -2,14 +2,17 @@ package sipozizo.tabling.common.entity;
 
 // Store.java
 import jakarta.persistence.*;
+import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalTime;
 
 @Getter
 @Entity
 @Table(name = "stores")
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Store extends BaseEntity {
 
     @Id
@@ -21,7 +24,7 @@ public class Store extends BaseEntity {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @Column(name = "name")
+    @Column(name = "store_name")
     private String storeName;
 
     @Column(name = "store_number")

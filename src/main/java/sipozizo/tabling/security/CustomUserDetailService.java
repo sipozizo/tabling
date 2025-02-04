@@ -6,7 +6,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
-import sipozizo.tabling.user.entity.User;
+import sipozizo.tabling.common.entity.User;
 import sipozizo.tabling.domain.user.repository.UserRepository;
 
 import java.util.NoSuchElementException;
@@ -19,8 +19,9 @@ public class CustomUserDetailService implements UserDetailsService {
     private final UserRepository userRepository;
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = userRepository.findByName(username).orElseThrow();
+    public UserDetails loadUserByUsername(String username) {
+        User user = userRepository.findByName(username)
+                .orElseThrow(() -> new UsernameNotFoundException("유저를 찾을 수 없습니다."));
         return new CustomUserDetails(user);
     }
 

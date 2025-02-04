@@ -3,11 +3,9 @@ package sipozizo.tabling.security;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import sipozizo.tabling.user.entity.User;
-
+import sipozizo.tabling.common.entity.User;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 
 @RequiredArgsConstructor
 public class CustomUserDetails implements UserDetails {
