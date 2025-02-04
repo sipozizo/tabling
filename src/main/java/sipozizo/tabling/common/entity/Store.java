@@ -2,15 +2,17 @@ package sipozizo.tabling.common.entity;
 
 // Store.java
 import jakarta.persistence.*;
-
+import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalTime;
 
 @Getter
 @Entity
 @Table(name = "stores")
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Store extends BaseEntity {
 
     @Id
@@ -18,7 +20,7 @@ public class Store extends BaseEntity {
     private Long id;
 
     // user_id
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
 
@@ -28,7 +30,7 @@ public class Store extends BaseEntity {
     @Column(name = "store_number")
     private String storeNumber;
 
-    @Column(name = "address")
+    @Column(name = "store_address")
     private String storeAddress;
 
     @Column(name = "registration_number")
@@ -42,9 +44,6 @@ public class Store extends BaseEntity {
 
     @Column(name = "closing_time")
     private LocalTime closingTime;
-
-    @Column(name = "is_deleted")
-    private boolean isDeleted;
 
     @Column(name = "category")
     private String category;
