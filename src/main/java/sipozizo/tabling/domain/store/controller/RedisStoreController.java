@@ -11,7 +11,7 @@ import sipozizo.tabling.domain.store.model.response.StoreWithViewCountResponseV2
 import sipozizo.tabling.domain.store.service.RedisStoreService;
 
 @RestController
-@RequestMapping("/api/stores")
+@RequestMapping("/api/redis-stores")
 @RequiredArgsConstructor
 public class RedisStoreController {
 
@@ -22,4 +22,8 @@ public class RedisStoreController {
         return ResponseEntity.ok(redisStoreService.getStoreV1(storeId));
     }
 
+    @GetMapping("/v2/{storeId}")
+    public ResponseEntity<StoreWithViewCountResponseV2> getStoreV2(@PathVariable Long storeId) {
+        return ResponseEntity.ok(redisStoreService.getStoreV2(storeId));
+    }
 }
