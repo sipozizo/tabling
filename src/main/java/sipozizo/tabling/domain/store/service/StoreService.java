@@ -3,6 +3,7 @@ package sipozizo.tabling.domain.store.service;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.CacheManager;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -75,23 +76,8 @@ public class StoreService {
      */
     @Transactional(readOnly = true)
     public Page<StoreResponse> getAllStoresV1(String keyword, Pageable pageable) {
-        Page<Store> stores;
-
-        if (keyword == null || keyword.isEmpty()) {
-            stores = storeRepository.findAll(pageable);
-        } else {
-            stores = storeRepository.findStoreByStoreCategory(keyword, pageable);
-        }
-
-        return stores.map(store -> new StoreResponse(
-                store.getId(),
-                store.getStoreName(),
-                store.getStoreNumber(),
-                store.getStoreAddress(),
-                store.getOpeningTime(),
-                store.getClosingTime(),
-                store.getCategory()
-        ));
+        return findStoresByKeyword(keyword, pageable)
+                .map(StoreResponse::fromEntity);
     }
 
     /**
@@ -114,30 +100,15 @@ public class StoreService {
     public Page<StoreResponse> getAllStoresV2(String keyword, Pageable pageable) { // TODO 레디스로 바꿀 때 직렬화 문제 해결하기
         log.info("검색 키워드 : {}", keyword);
 
-
-        if (keyword != null && !keyword.isBlank()) {
-            savePopularKeyword(keyword);
-            log.info("인기 검색어 저장 - {} (현재 검색 횟수: {})", keyword, popularKeywordMap.get(keyword));
-
-        }
-
-        Page<Store> stores;
-
-        if (keyword == null || keyword.isBlank()) {
-            stores = storeRepository.findAll(pageable);
-        } else {
-            stores = storeRepository.findStoreByStoreCategory(keyword, pageable);
-        }
-
-        return stores.map(StoreResponse::fromEntity);
+        return findStoresByKeyword(keyword, pageable).map(StoreResponse::fromEntity);
     }
 
     /**
-     * 캐시 무효화
+     * 캐시 삭제
      */
-//    public void evictCache(String keyword) {
-//        cacheManager.getCache(STORE_CACHE).evict(keyword);
-//    }
+    @CacheEvict(value = STORE_CACHE, key = "storeId")
+    public void clearStoreCache(Long storeId) {
+    }
 
     /**
      * 인기 검색어 저장 (로컬 메모리)
@@ -155,5 +126,25 @@ public class StoreService {
                 .limit(5)
                 .map(Map.Entry::getKey)
                 .collect(Collectors.toList());
+    }
+
+    /**
+     * keyword 비었는지 확인하는 method
+     */
+    private boolean isKeywordEmpty(String keyword) {
+        return keyword == null || keyword.isBlank();
+    }
+
+    /**
+     * 중복 if문 메서드로 뽑기
+     */
+    private Page<Store> findStoresByKeyword(String keyword, Pageable pageable) {
+        if (!isKeywordEmpty(keyword)) {
+            popularKeywordMap.merge(keyword, 1, Integer::sum);
+            log.info("인기 검색어 저장 - {} (현재 검색 횟수: {})", keyword, popularKeywordMap.get(keyword));
+        }
+        return isKeywordEmpty(keyword)
+                ? storeRepository.findAll(pageable)
+                : storeRepository.findStoreByStoreCategory(keyword, pageable);
     }
 }
