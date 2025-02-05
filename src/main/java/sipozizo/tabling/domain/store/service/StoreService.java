@@ -9,6 +9,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import sipozizo.tabling.common.entity.Store;
+import sipozizo.tabling.common.exception.ErrorCode;
+import sipozizo.tabling.common.exception.base.ConflictException;
+import sipozizo.tabling.common.exception.base.NotFoundException;
 import sipozizo.tabling.domain.store.model.request.StoreRequest;
 import sipozizo.tabling.domain.store.model.response.StoreResponse;
 import sipozizo.tabling.domain.store.repository.StoreRepository;
@@ -36,11 +39,11 @@ public class StoreService {
     public void createStore(Long userId, StoreRequest request) {
 
         if (storeRepository.existsByStoreName(request.storeName())) {
-            throw new IllegalArgumentException("이미 존재하는 가게입니다."); //todo 예외처리 변경 예정
+            throw new ConflictException(ErrorCode.STORE_ALREADY_EXISTS);
         }
 
         if (storeRepository.existsByRegistrationNumber(request.registrationNumber())) {
-            throw new IllegalArgumentException("이미 존재하는 사업자등록번호입니다."); // todo 예외처리 변경 예정
+            throw new ConflictException(ErrorCode.STORE_REGISTRATION_CONFLICT);
         }
 
         Store store = Store.builder()
@@ -63,7 +66,7 @@ public class StoreService {
     @Transactional(readOnly = true)
     public StoreResponse getStoreByIdV1(Long storeId) {
         Store store = storeRepository.findById(storeId)
-                .orElseThrow(() -> new IllegalArgumentException("조건에 맞는 가게가 존재하지 않습니다."));
+                .orElseThrow(() -> new NotFoundException(ErrorCode.STORE_NOT_FOUND));
         return StoreResponse.fromEntity(store);
     }
 
@@ -98,7 +101,7 @@ public class StoreService {
     @Transactional(readOnly = true)
     public StoreResponse getStoreByIdV2(Long storeId) {
         Store store = storeRepository.findById(storeId)
-                .orElseThrow(() -> new IllegalArgumentException("조건에 맞는 가게가 존재하지 않습니다.")); //todo 예외 처리 변경 예정
+                .orElseThrow(() -> new NotFoundException(ErrorCode.STORE_NOT_FOUND));
         return StoreResponse.fromEntity(store);
     }
 
@@ -128,6 +131,13 @@ public class StoreService {
 
         return stores.map(StoreResponse::fromEntity);
     }
+
+    /**
+     * 캐시 무효화
+     */
+//    public void evictCache(String keyword) {
+//        cacheManager.getCache(STORE_CACHE).evict(keyword);
+//    }
 
     /**
      * 인기 검색어 저장 (로컬 메모리)
