@@ -6,13 +6,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import sipozizo.tabling.common.entity.Store;
 import sipozizo.tabling.domain.store.model.response.StoreWithViewCountResponseV1;
-import sipozizo.tabling.domain.store.model.response.StoreWithViewCountResponseV2;
 import sipozizo.tabling.domain.store.repository.StoreRepository;
 
-import java.time.Duration;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
-import java.util.concurrent.TimeUnit;
 
 @Service
 @RequiredArgsConstructor
