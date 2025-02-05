@@ -66,9 +66,10 @@ public class Store extends BaseEntity {
     }
 
     public void incrementViewCount() {
-        if (this.view == 0) {
-            this.view = 1;
-        }
         this.view++;
+    }
+
+    public void updateViewCount(Long viewCount) {
+        this.view += Math.toIntExact(viewCount);
     }
 }

@@ -21,4 +21,8 @@ public class RedisStoreController {
         return ResponseEntity.ok(redisStoreService.getStoreV1(storeId));
     }
 
+    @GetMapping("/v2/{storeId}")
+    public ResponseEntity<StoreWithViewCountResponseV2> getStoreV2(@PathVariable Long storeId) {
+        return ResponseEntity.ok(redisStoreService.getStoreV2(storeId));
+    }
 }
