@@ -6,6 +6,8 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import sipozizo.tabling.common.entity.Store;
+import sipozizo.tabling.common.exception.ErrorCode;
+import sipozizo.tabling.common.exception.base.NotFoundException;
 import sipozizo.tabling.domain.store.model.dto.StoreDto;
 import sipozizo.tabling.domain.store.model.response.StoreWithViewCountResponseV1;
 import sipozizo.tabling.domain.store.model.response.StoreWithViewCountResponseV2;
@@ -32,7 +34,7 @@ public class RedisStoreService {
     @Transactional
     public StoreWithViewCountResponseV1 getStoreV1(Long storeId) {
         Store store = storeRepository.findStoreById(storeId)
-                .orElseThrow(() -> new IllegalStateException("찾는 상점이 없습니다."));
+                .orElseThrow(() ->  new NotFoundException(ErrorCode.STORE_NOT_FOUND)); // 일치
         store.incrementViewCount();
         return StoreWithViewCountResponseV1.of(store);
     }
@@ -51,7 +53,7 @@ public class RedisStoreService {
         }
 
         Store store = storeRepository.findStoreById(storeId)
-                .orElseThrow(() -> new IllegalStateException("찾는 상점이 없습니다."));
+                .orElseThrow(() ->  new NotFoundException(ErrorCode.STORE_NOT_FOUND));
         StoreDto storeDto = StoreDto.of(store);
 
         storeRedisTemplate.opsForValue().set(redisKey, storeDto, 10, TimeUnit.MINUTES);
