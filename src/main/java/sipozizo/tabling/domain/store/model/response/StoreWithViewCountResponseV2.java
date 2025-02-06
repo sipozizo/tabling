@@ -2,7 +2,6 @@ package sipozizo.tabling.domain.store.model.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import sipozizo.tabling.common.entity.Store;
 import sipozizo.tabling.domain.store.model.dto.StoreDto;
 
 @Getter

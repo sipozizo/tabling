@@ -95,7 +95,7 @@ public class StoreService {
      * 캐시 적용 버전 가게 전체 조회 (V2)
      * TODO PageDTO 로 감싸기
      */
-    @Cacheable(value = STORE_KEYWORD_CACHE, key = "#keyword + '_' + #pageable.pageNumber") // 페이지는 계속 바뀌는데 키워드만으로 캐싱을 하기에는 무리가 있어서 에러가 발생했다..언더바로 더해서 페이지 넘버까지 같이 캐싱
+    @Cacheable(value = STORE_KEYWORD_CACHE, key = "#keyword + '_' + #pageable.pageNumber + '_' + #pageable.pageSize + '_' + #pageable.sort.toString()") // 페이지는 계속 바뀌는데 키워드만으로 캐싱을 하기에는 무리가 있어서 에러가 발생했다..언더바로 더해서 페이지 넘버까지 같이 캐싱
     @Transactional(readOnly = true)
     public Page<StoreResponse> getAllStoresV2(String keyword, Pageable pageable) { // TODO 레디스로 바꿀 때 직렬화 문제 해결하기
         log.info("검색 키워드 : {}", keyword);
@@ -106,7 +106,7 @@ public class StoreService {
     /**
      * 캐시 삭제
      */
-    @CacheEvict(value = STORE_CACHE, key = "storeId")
+    @CacheEvict(value = STORE_CACHE, key = "#storeId") // String 값에서 storeId받도록 수정
     public void clearStoreCache(Long storeId) {
     }
 
