@@ -49,7 +49,8 @@ public class Store extends BaseEntity {
     private String category;
 
     @Column(name = "isDeleted")
-    boolean isDeleted;
+    private boolean isDeleted;
+
 
     //    착석 한계 개념 추가
     @Column(name = "max_seating_capacity")
