@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 import sipozizo.tabling.common.entity.Store;
 import sipozizo.tabling.domain.store.model.dto.StoreDto;
 import sipozizo.tabling.domain.store.model.response.StoreWithViewCountResponseV1;
+import sipozizo.tabling.domain.store.model.response.StoreWithViewCountResponseV2;
 import sipozizo.tabling.domain.store.repository.StoreRepository;
 
 
