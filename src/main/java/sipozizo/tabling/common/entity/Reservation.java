@@ -33,8 +33,8 @@ public class Reservation extends BaseEntity {
     private Integer waitingNumber;
 
 //    TODO: 낙관적 락으로 테스트
-    @Version
-    private Long version;
+    // @Version
+    // private Long version;
 
     public Reservation(User customer,  ReservationStatus reservationStatus, Store store) {
         this.customer = customer;
