@@ -28,7 +28,7 @@ public class ReservationControllerV1 {
     }
 
     // 예약 목록 조회 API
-    @GetMapping("/store/{storeId}")
+    @GetMapping("/stores/{storeId}")
     public ResponseEntity<List<Reservation>> getReservationsByStoreAndStatus(@PathVariable Long storeId,
                                                                              @RequestParam ReservationStatus status) {
         List<Reservation> reservations = reservationServiceV1.getReservationsByStoreAndStatus(storeId, status);
