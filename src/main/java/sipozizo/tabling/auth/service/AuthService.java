@@ -4,12 +4,15 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import sipozizo.tabling.auth.dto.request.UpdateUserRoleRequest;
 import sipozizo.tabling.auth.dto.request.UserLoginRequest;
 import sipozizo.tabling.auth.dto.request.UserRegisterRequest;
 import sipozizo.tabling.auth.dto.response.UserLoginResponse;
 import sipozizo.tabling.common.entity.User;
 import sipozizo.tabling.common.jwt.JwtUtil;
+import sipozizo.tabling.domain.user.enums.UserRole;
 import sipozizo.tabling.domain.user.repository.UserRepository;
+import sipozizo.tabling.security.CustomUserDetails;
 
 import java.util.NoSuchElementException;
 
@@ -46,5 +49,16 @@ public class AuthService {
         String token = jwtUtil.generateToken(user.getId(),user.getUserRole());
 
         return UserLoginResponse.from(user, token);
+    }
+
+    @Transactional
+    public void updateAuthority(CustomUserDetails userDetails, UpdateUserRoleRequest request) {
+        User user = userRepository.findUserById(userDetails.getUserId())
+                .orElseThrow(() -> new NoSuchElementException("사용자를 찾을 수 없습니다."));
+
+        UserRole changeRole = UserRole.valueOf(request.getRole());
+
+        user.updateRole(changeRole);
+        userRepository.save(user);
     }
 }
