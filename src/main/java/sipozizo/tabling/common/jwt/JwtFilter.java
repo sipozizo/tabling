@@ -25,36 +25,28 @@ public class JwtFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-
-        String requestURI = request.getRequestURI();
-
-        if (requestURI.equals("/api/auth/register") || requestURI.equals("/api/auth/login")) {
-            filterChain.doFilter(request, response);
-            return;
-        }
-
-        // 로그인 이후
+//
         String authorization = request.getHeader("Authorization");
 
-        if (authorization == null || !authorization.startsWith("Bearer ")) {
-            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "JWT 토큰이 필요합니다.");
-            return;
+//        기존 코드 문제점: ① SecurityConfig에서 설정된 예외 URI 로직을 한 번 더 처리함. ② JwtFilter부분에 해당 로직을 처리하려면, 바로 건너띄지 못함
+//        그래서 로직을 이중 if문을 통해 구성했습니다.
+        if (authorization != null && authorization.startsWith("Bearer ")) {
+            String token = authorization.substring(7);
+
+            if (jwtUtil.validateToken(token)) {
+                Long userId = jwtUtil.extractUserId(token);
+                UserDetails userDetails = customUserDetailService.loadUserByUserId(userId);
+
+                SecurityContextHolder.getContext()
+                        .setAuthentication(new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities()));
+            } else {
+                // 토큰 검증에 실패한 경우 로그만 남기고, 인증 정보는 설정하지 않음
+                log.warn("Invalid JWT token.");
+            }
         }
-
-        String token = authorization.substring(7);
-
-        if (!jwtUtil.validateToken(token)) {
-            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "토큰 검증에 실패했습니다.");
-            return;
-        }
-
-        Long userId = jwtUtil.extractUserId(token);
-
-        UserDetails userDetails = customUserDetailService.loadUserByUserId(userId);
-
-        SecurityContextHolder.getContext()
-                .setAuthentication(new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities()));
 
         filterChain.doFilter(request, response);
+
+
     }
 }
