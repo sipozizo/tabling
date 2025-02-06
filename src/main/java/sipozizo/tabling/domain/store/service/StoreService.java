@@ -34,34 +34,6 @@ public class StoreService {
     private final StoreRepository storeRepository;
 
     /**
-     * 가게 생성 - V1, V2 형태 동일
-     */
-    @Transactional
-    public void createStore(Long userId, StoreRequest request) {
-
-        if (storeRepository.existsByStoreName(request.storeName())) {
-            throw new ConflictException(ErrorCode.STORE_ALREADY_EXISTS);
-        }
-
-        if (storeRepository.existsByRegistrationNumber(request.registrationNumber())) {
-            throw new ConflictException(ErrorCode.STORE_REGISTRATION_CONFLICT);
-        }
-
-        Store store = Store.builder()
-                .storeName(request.storeName())
-                .storeNumber(request.storeNumber())
-                .storeAddress(request.storeAddress())
-                .registrationNumber(request.registrationNumber())
-                .openingTime(request.openingTime()) // NPE 방지
-                .closingTime(request.closingTime())
-                .category(request.category())
-                .maxSeatingCapacity(request.maxSeatingCapacity())
-                .build();
-
-        storeRepository.save(store);
-    }
-
-    /**
      * 캐시 미적용 버전 가게 단건 조회 (V1)
      */
     @Transactional(readOnly = true)
