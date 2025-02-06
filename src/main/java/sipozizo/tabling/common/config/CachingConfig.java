@@ -21,6 +21,6 @@ public class CachingConfig {
         CaffeineCacheManager cacheManager = new CaffeineCacheManager();
         cacheManager.setCaffeine(
                 Caffeine.newBuilder().expireAfterWrite(1, TimeUnit.DAYS).recordStats());
-        return cacheManager; // TODO 추후 Cache V2로 바꿀 때 이 부분만 RedisCacheManager 로 변경요망
+        return cacheManager;
     }
 }
