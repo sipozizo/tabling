@@ -9,7 +9,7 @@ import sipozizo.tabling.common.entity.User;
 public class UserLoginResponse {
 
     private String message;
-    private String AccessToken;
+    private String accessToken;
 
     public static UserLoginResponse from(User user, String accessToken) {
         return new UserLoginResponse(

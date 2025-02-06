@@ -1,6 +1,7 @@
 package sipozizo.tabling.auth.controller;
 
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,12 +22,12 @@ public class AuthController {
     private final AuthService authService;
 
     @PostMapping("/register")
-    public void registerUser(@RequestBody UserRegisterRequest request) {
+    public void registerUser(@Valid @RequestBody UserRegisterRequest request) {
         authService.registerUser(request);
     }
 
     @PostMapping("/login")
-    public ResponseEntity<UserLoginResponse> login(@RequestBody UserLoginRequest request) {
+    public ResponseEntity<UserLoginResponse> login(@Valid @RequestBody UserLoginRequest request) {
 
         UserLoginResponse loginResponse = authService.login(request);
 
