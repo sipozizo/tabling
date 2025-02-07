@@ -1,6 +1,7 @@
 package sipozizo.tabling;
 
 
+
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,9 +23,6 @@ import java.util.*;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-
 
 @SpringBootTest
 @ActiveProfiles("test") // 테스트 프로파일 지정
@@ -85,16 +83,16 @@ public class TablingWaitingNumTests {
         storeRepository.save(store);
 
         // 예약할 고객 User 생성
-        String reserverEmail = "reserver" + (userCount + 2) + "@example.com";
-        User reserver = new User(
-                "Reserver" + (userCount + 2),   // name
+        String customerEmail = "customer" + (userCount + 2) + "@example.com";
+        User customer = new User(
+                "Customer" + (userCount + 2),   // name
                 "010-1234-5678",                // phoneNumber
                 "Reserver Address",             // address
-                reserverEmail,                  // email
+                customerEmail,                  // email
                 "password123",                  // password
                 UserRole.USER                   // userRole
         );
-        userRepository.save(reserver);
+        userRepository.save(customer);
 
         int threadCount = 100;
         ExecutorService executorService = Executors.newFixedThreadPool(threadCount);
@@ -104,7 +102,7 @@ public class TablingWaitingNumTests {
         for (int i = 0; i < threadCount; i++) {
             executorService.submit(() -> {
                 try {
-                    reservationServiceV1.createReservation(reserver.getId(), store.getId());
+                    reservationServiceV1.createReservation(customer.getId(), store.getId());
                 } catch (Exception e) {
                     e.printStackTrace(); // 스택 트레이스 출력
                 } finally {
@@ -146,24 +144,12 @@ public class TablingWaitingNumTests {
         // 데이터베이스에 저장된 User 수 확인
         long userCount = userRepository.count();
 
-        // 매장 소유자 User 생성
-        String ownerEmail = "owner" + (userCount + 1) + "@example.com";
-        User storeOwner = new User(
-                "Owner" + (userCount + 1),     // name
-                "010-0000-0000",              // phoneNumber
-                "Owner Address",              // address
-                ownerEmail,                   // email
-                "password123",                // password
-                UserRole.USER                 // userRole
-        );
-        userRepository.save(storeOwner);
-
         // 매장 생성
         Store store = createTestStore(
                 "Test Store",                   // name
                 "02-1234-5678",                 // storeNumber
                 "Store Address",                // address
-                "123-45-67890",                 // registrationNumber
+                "123-46-67890",                 // registrationNumber
                 LocalTime.of(9, 0),             // openingTime
                 LocalTime.of(18, 0),            // closingTime
                 50                              // maxSeatingCapacity
@@ -171,16 +157,16 @@ public class TablingWaitingNumTests {
         storeRepository.save(store);
 
         // 예약할 고객 User 생성
-        String reserverEmail = "reserver" + (userCount + 2) + "@example.com";
-        User reserver = new User(
-                "Reserver" + (userCount + 2),   // name
+        String customerEmail = "customer" + (userCount + 2) + "@example.com";
+        User customer = new User(
+                "Customer" + (userCount + 2),   // name
                 "010-1234-5678",                // phoneNumber
                 "Reserver Address",             // address
-                reserverEmail,                  // email
+                customerEmail,                  // email
                 "password123",                  // password
                 UserRole.USER                   // userRole
         );
-        userRepository.save(reserver);
+        userRepository.save(customer);
 
         int threadCount = 100;
         ExecutorService executorService = Executors.newFixedThreadPool(threadCount);
@@ -190,7 +176,7 @@ public class TablingWaitingNumTests {
         for (int i = 0; i < threadCount; i++) {
             executorService.submit(() -> {
                 try {
-                    reservationServiceV2.createReservation(reserver.getId(), store.getId());
+                    reservationServiceV2.createReservation(customer.getId(), store.getId());
                 } catch (Exception e) {
                     e.printStackTrace(); // 스택 트레이스 출력
                 } finally {
@@ -257,17 +243,18 @@ public class TablingWaitingNumTests {
         );
         storeRepository.save(store);
 
+
         // 예약할 고객 User 생성
-        String reserverEmail = "reserver" + (userCount + 2) + "@example.com";
-        User reserver = new User(
-                "Reserver" + (userCount + 2),   // name
+        String customerEmail = "customer" + (userCount + 2) + "@example.com";
+        User customer = new User(
+                "Customer" + (userCount + 2),   // name
                 "010-1234-5678",                // phoneNumber
                 "Reserver Address",             // address
-                reserverEmail,                  // email
+                customerEmail,                  // email
                 "password123",                  // password
                 UserRole.USER                   // userRole
         );
-        userRepository.save(reserver);
+        userRepository.save(customer);
 
         int threadCount = 100;
         ExecutorService executorService = Executors.newFixedThreadPool(threadCount);
@@ -277,7 +264,7 @@ public class TablingWaitingNumTests {
         for (int i = 0; i < threadCount; i++) {
             executorService.submit(() -> {
                 try {
-                    reservationServiceV3.createReservation(reserver.getId(), store.getId());
+                    reservationServiceV3.createReservation(customer.getId(), store.getId());
                 } catch (Exception e) {
                     e.printStackTrace(); // 스택 트레이스 출력
                 } finally {
