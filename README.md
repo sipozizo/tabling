@@ -5,8 +5,9 @@
 ## 📄 목차   
 1. [프로젝트 개요](#프로젝트-개요)
 2. [주요 기능](#주요-기능)
-3. [ERD](#ERD)
-4. [API 명세서](#API-명세서)
+3. [와이어 프레임](#와이어-프레임)
+4. [ERD](#ERD)
+5. [API 명세서](#API-명세서)
 <br>   
 
 ## 프로젝트 개요 
@@ -39,8 +40,11 @@
 - 가게 CR - (non caching / caching applied)
 - 예약 CR - (lock)
 
-## ERD  
+## 와이어 프레임  
 ![Image](https://github.com/user-attachments/assets/52c914a2-40bf-487e-b6c7-8347d60b540f)
+
+## ERD
+![Image](https://github.com/user-attachments/assets/7264bf89-911d-4f25-a41f-320db1fa6707)
 
 ## API 명세서
 ![Image](https://github.com/user-attachments/assets/c7a79d2f-7896-4a9d-88cd-c386cc924d51)
