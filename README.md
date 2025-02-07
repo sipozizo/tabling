@@ -40,7 +40,9 @@
 * JUnit
 * Jackson Datatype JSR310
 
-### 주요 기능
+<br>
+
+## 주요 기능
 - 회원 가입 (사장/고객)
 - 로그인
 - 가게 CR - (non caching / caching applied)
