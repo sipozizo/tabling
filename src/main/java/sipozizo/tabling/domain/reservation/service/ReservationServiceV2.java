@@ -59,6 +59,21 @@ public class ReservationServiceV2 {
     }
 
     @Transactional
+    public void seatReservation(Long reservationId) {
+        Reservation reservation = reservationRepository.findById(reservationId)
+                .orElseThrow(() -> new IllegalArgumentException("ID가 " + reservationId + "인 예약을 찾을 수 없습니다."));
+
+        if (reservation.getReservationStatus() != ReservationStatus.CALLED) {
+            throw new IllegalStateException("호출된 상태의 예약만 착석 처리할 수 있습니다.");
+        }
+
+        reservation.updateReservationStatus(ReservationStatus.SEATED);
+        reservationRepository.save(reservation);
+
+        handleAvailableCapacity(reservation.getStore());
+    }
+
+    @Transactional
     public void completeReservation(Long reservationId) {
         Reservation reservation = reservationRepository.findById(reservationId)
                 .orElseThrow(() -> new IllegalArgumentException("Cannot find reservation with ID: " + reservationId));

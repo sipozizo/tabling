@@ -25,11 +25,11 @@ public class ReservationServiceV3 {
     private final RedisLockServiceV3 lockService;
     private final ReservationUpdateServiceV2 reservationUpdateServiceV2;
 
-    @Transactional
+//    @Transactional
     public Reservation createReservation(Long reserverId, Long storeId) {
         // 락 키 설정 (예: 매장별로 락)
         String lockKey = "store:" + storeId;
-        boolean isLocked = lockService.tryLock(lockKey, 1000, 1000);
+        boolean isLocked = lockService.tryLock(lockKey, 100000, 100000);
         if (!isLocked) {
             throw new RuntimeException("Failed to acquire lock for store: " + storeId);
         }

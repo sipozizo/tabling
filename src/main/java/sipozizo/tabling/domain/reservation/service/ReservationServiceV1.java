@@ -60,6 +60,22 @@ public class ReservationServiceV1 {
     }
 
     @Transactional
+    public void seatReservation(Long reservationId) {
+        Reservation reservation = reservationRepository.findById(reservationId)
+                .orElseThrow(() -> new IllegalArgumentException("Cannot find reservation with ID: " + reservationId));
+
+        if (reservation.getReservationStatus() != ReservationStatus.CALLED) {
+            throw new IllegalStateException("Only called reservations can be seated.");
+        }
+
+        reservation.updateReservationStatus(ReservationStatus.SEATED);
+        reservationRepository.save(reservation);
+
+
+        handleAvailableCapacity(reservation.getStore());
+    }
+
+    @Transactional
     public void completeReservation(Long reservationId) {
         Reservation reservation = reservationRepository.findById(reservationId)
                 .orElseThrow(() -> new IllegalArgumentException("Cannot find reservation with ID: " + reservationId));
