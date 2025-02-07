@@ -22,4 +22,5 @@ public class UserRegisterRequest {
     private String email;
     @NotBlank
     private String password;
+
 }

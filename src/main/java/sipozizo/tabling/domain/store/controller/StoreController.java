@@ -6,6 +6,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -23,15 +24,7 @@ public class StoreController {
 
     private final StoreService storeService;
 
-    /**
-     * 가게 생성 API - V1, V2 형태 동일
-     */
-    @PostMapping
-    public ResponseEntity<Void> createStore(@AuthenticationPrincipal CustomUserDetails userDetails,
-                                              @Validated @RequestBody StoreRequest request) {
-        storeService.createStore(userDetails.getUserId(), request);
-        return ResponseEntity.status(HttpStatus.CREATED).build();
-    }
+
 
     /**
      * 캐싱 미적용 버전 가게 단건 조회 API (V1)
@@ -88,5 +81,13 @@ public class StoreController {
     public ResponseEntity<List<String>> getPopularKeywords() {
         List<String> keywords = storeService.getPopularKeywords();
         return ResponseEntity.ok(keywords);
+    }
+
+    /**
+     * 캐시 확인 API
+     */
+    @GetMapping("/{cacheName}")
+    public void printCache(@PathVariable String cacheName) {
+        storeService.printCacheContents(cacheName);
     }
 }
