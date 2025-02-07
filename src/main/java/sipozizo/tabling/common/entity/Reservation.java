@@ -16,11 +16,9 @@ public class Reservation extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // reserver_id TODO: 존재하는 영어로
     @ManyToOne
-    @JoinColumn(name = "reserver_id")
-    private User reserver;
-
+    @JoinColumn(name = "customer_id")
+    private User customer;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "reservation_status", length = 20)
@@ -35,17 +33,16 @@ public class Reservation extends BaseEntity {
     private Integer waitingNumber;
 
 //    TODO: 낙관적 락으로 테스트
-//    @Version
-//    private Long version;
+    // @Version
+    // private Long version;
 
-    public Reservation(User reserver,  ReservationStatus reservationStatus, Store store) {
-        this.reserver = reserver;
+    public Reservation(User customer,  ReservationStatus reservationStatus, Store store) {
+        this.customer = customer;
         this.reservationStatus = reservationStatus;
         this.store = store;
     }
 
     // Update methods
-
 
     public void updateReservationStatus(ReservationStatus reservationStatus) {
         this.reservationStatus = reservationStatus;
