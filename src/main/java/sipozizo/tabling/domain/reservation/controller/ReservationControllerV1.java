@@ -13,16 +13,16 @@ import sipozizo.tabling.security.CustomUserDetails;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1/reservations")
+@RequestMapping("/api/reservations/v1")
 @RequiredArgsConstructor
 public class ReservationControllerV1 {
 
     private final ReservationServiceV1 reservationServiceV1;
 
     // 예약 생성 API
-    @PostMapping
+    @PostMapping("/stores/{storeId}")
     public ResponseEntity<Reservation> createReservation(@AuthenticationPrincipal CustomUserDetails userDetails,
-                                                         @RequestParam Long storeId) {
+                                                         @PathVariable Long storeId) {
         Reservation reservation = reservationServiceV1.createReservation(userDetails.getUserId(), storeId);
         return ResponseEntity.status(201).body(reservation);
     }
@@ -36,14 +36,14 @@ public class ReservationControllerV1 {
     }
 
     // 예약 완료 처리 API (식당 이용 완료)
-    @PostMapping("/{id}/complete")
+    @PatchMapping("/{id}/complete")
     public ResponseEntity<Void> completeReservation(@PathVariable Long id) {
         reservationServiceV1.completeReservation(id);
         return ResponseEntity.ok().build();
     }
 
     // 예약 취소 API
-    @PostMapping("/{id}/cancel")
+    @DeleteMapping("/{id}/cancel")
     public ResponseEntity<Void> cancelReservation(@PathVariable Long id) {
         reservationServiceV1.cancelReservation(id);
         return ResponseEntity.ok().build();
