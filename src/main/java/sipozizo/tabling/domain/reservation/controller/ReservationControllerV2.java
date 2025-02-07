@@ -35,6 +35,12 @@ public class ReservationControllerV2 {
         return ResponseEntity.ok(reservations);
     }
 
+    @PatchMapping("/{id}/seat")
+    public ResponseEntity<Void> seatReservation(@PathVariable Long id) {
+        reservationServiceV2.seatReservation(id);
+        return ResponseEntity.ok().build();
+    }
+
     // 예약 완료 처리 API (식당 이용 완료)
     @PatchMapping("/{id}/complete")
     public ResponseEntity<Void> completeReservation(@PathVariable Long id) {
