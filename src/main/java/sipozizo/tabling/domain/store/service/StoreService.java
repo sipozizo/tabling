@@ -2,6 +2,7 @@ package sipozizo.tabling.domain.store.service;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
@@ -146,5 +147,38 @@ public class StoreService {
         return isKeywordEmpty(keyword)
                 ? storeRepository.findAll(pageable)
                 : storeRepository.findStoreByStoreCategory(keyword, pageable);
+    }
+
+    /**
+     * 캐시 매니저를 통해서 인메모리 캐시 저장소에 담겨있는 데이터를 가시화 하는 로직
+     */
+    public void printCacheContents(String cacheName) {
+        Cache cache = cacheManager.getCache(cacheName);
+        if (cache != null) {
+            log.info("현재 '{}' 캐시 내용:", cacheName);
+
+            // 캐시가 stores(단건 조회)인지 popularKeywords(검색 캐시)인지 확인 후 데이터 조회
+            if (STORE_CACHE.equals(cacheName)) {
+                for (long storeId = 1; storeId <= 500; storeId++) {
+                    Cache.ValueWrapper valueWrapper = cache.get(storeId);
+                    if (valueWrapper != null) {
+                        log.info("  - Key: {}, Value: {}", storeId, valueWrapper.get());
+                    }
+                }
+            } else if (STORE_KEYWORD_CACHE.equals(cacheName)) {
+                String[] sampleKeywords = {"한식", "중식", "양식", "일식"};
+                for (String keyword : sampleKeywords) {
+                    for (int page = 0; page < 100; page++) {
+                        String key = keyword + "_" + page;
+                        Cache.ValueWrapper valueWrapper = cache.get(key);
+                        if (valueWrapper != null) {
+                            log.info("  - Key: {}, Value: {}", key, valueWrapper.get());
+                        }
+                    }
+                }
+            }
+        } else {
+            log.warn("'{}' 캐시가 존재하지 않습니다.", cacheName);
+        }
     }
 }

@@ -88,4 +88,12 @@ public class StoreController {
         List<String> keywords = storeService.getPopularKeywords();
         return ResponseEntity.ok(keywords);
     }
+
+    /**
+     * 캐시 확인 API
+     */
+    @GetMapping("/{cacheName}")
+    public void printCache(@PathVariable String cacheName) {
+        storeService.printCacheContents(cacheName);
+    }
 }
