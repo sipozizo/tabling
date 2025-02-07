@@ -80,7 +80,7 @@ public class StoreService {
     /**
      * 캐시 삭제
      */
-    @CacheEvict(value = STORE_CACHE, key = "#storeId") // String 값에서 storeId받도록 수정
+    @CacheEvict(value = STORE_CACHE, key = "#storeId")
     public void clearStoreCache(Long storeId) {
     }
 
